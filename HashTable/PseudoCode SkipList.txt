@@ -1,0 +1,77 @@
+FindNode(keyToSearch)
+currentNode = head
+var currentNode = FindFloorNode(head,keyToSearch)
+While(currentNode.Down!=null)
+{
+   currentNode = FindFloorNode(currentNode.Down,keyToSearch)
+}
+
+return currentNode;
+
+
+
+
+FindFloorNode(currentNode,keyToSearch)
+{
+  while(currentNode.Next.Key<=keyToSearch)
+ {
+   currentNode = currentNode.Next;
+ }
+ 
+  return currentNode.Prev;
+}
+
+
+CreateNewLevel()
+{ //key,value,next,prev, top , down
+  var nodenegInf = new Node(-inf,null,null,null,null,head);
+  var nodeposInf = new Node(+inf,null,null,nodenegInf,null,tail)
+  nodenegInf.Next = nodeposInf;
+  head.Up = nodenegInf;
+  head.Down = nodeposInf;
+  head = nodenegInf;
+  tail = nodeposInf;
+  h++;
+}
+
+/*Insert an Item*/
+Insert(key,value)
+{
+  var currentNode = FindNode(key);
+  var lastnewNode = InsertBetween(key,value,currentNode,currentNode.Next);
+  currentlevel = 1;
+  While(random.NextDouble<0.5)
+  {
+     if(currentlevel>h)
+     {
+        CreateNewLevel();
+      }
+     currentNode = FindPrevNodeonLevelAbove(currentNode);
+     var newNode =InsertBetween(key,value,currentNode,currentNode.Next);
+     newNode.Down = lastnewNode;
+     lastnewNode.Up = newNode;
+     lastnewNode = newNode;
+     currentlevel++;
+  }
+
+}
+
+InsertBetween(key,value,first,second)
+{
+  var newNode = new Node(key,value,first,second);
+  first.Next = newNode;
+  second.Prev = newNode;
+  return newNode;
+  
+}
+
+FindPrevNodeonLevelAbove(currentNode)
+{
+  While(currentNode.Prev.Up == null)
+  {
+     currentNode = currentNode.Prev;
+  }
+  
+  return currentNode.Prev.Up;
+
+}

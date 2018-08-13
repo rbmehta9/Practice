@@ -1,0 +1,6 @@
+Basics of .NET
+sql queries
+Basics of oops
+basics of C#
+garbage collection
+
