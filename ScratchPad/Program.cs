@@ -291,15 +291,88 @@ namespace ScratchPad
             //Console.WriteLine(func("adasdasdas"));
             //Console.WriteLine(func1(2, 3));
 
-            List<int> lst = null;
-            lst.Where(l => l > 3);
+            //List<int> lst = null;
+            //lst.Where(l => l > 3);
 
+            //var products = new List<Product>()
+            //{
+            //    new Product() {Id = 1, Qty = 1},
+            //    new Product() {Id = 2, Qty = 2},
+            //    new Product() {Id = 1, Qty = 3},
+            //    new Product() {Id = 1, Qty = 4}
+            //};
+
+            //Product a = null;
+
+            //var grp = products.GroupBy(p => p.Id);//.Select(s => new { ProductId = s.Key, Qty = s.Sum(s1 => s1.Qty) });
+            //var elementsByKey = grp.First().Select(x => x);
+
+            //if(a != null) return;
+            //{
+            //    var i = 1;
+            //    i++;
+            //}
+
+            //var prods = new List<Product>()
+            //{
+            //    new Product()
+            //    {
+            //        Id = 1,
+            //        Qty = 1,
+            //        abc = new ABC() {Id = 1, Name = "1", Child = new Child() {Prop1 = 1, Prop2 = "1"}}
+            //    },
+            //    new Product() {Id = 1, Qty = 1, abc = new ABC() {Id = 1, Name = "1"}},
+            //    new Product() {Id = 1, Qty = 1}
+            //};
+
+            //var sortedDictionary = new SortedDictionary<int, string>();
+            //sortedDictionary.Add(3,"abc");
+            //sortedDictionary.Add(1,"pqr");
+            //sortedDictionary.Add(2,"fgh");
+            //var e1 = E1.A1;
+            //var e2 = (E2) (int) E1.A1;
+            //var e3 = (E2)Enum.Parse(typeof(E2), e1.ToString());
+
+            ABC abc = new ABC(){Id = 1};
+            var i = abc?.Id ?? 0;
+
+        }
+
+
+        
+
+        public enum E1
+        {
+            A1 = 1,
+            A2 = 2
+        }
+
+        public enum E2
+        {
+            A1 = 1,
+            A2 = 2
+        }
+
+        public class Product
+        {
+            public int Id { get; set; }
+            public int Qty { get; set; }
+
+            public  ABC abc { get; set; }
         }
 
         public class ABC
         {
-            public int Id { get; set; }
+            public int? Id { get; set; }
             public string Name { get; set; }
+
+            public  Child Child { get; set; }
+        }
+
+        public class Child
+        {
+            public int Prop1 { get; set; }
+            public string Prop2 { get; set; }
         }
 
         public sealed class Singleton
