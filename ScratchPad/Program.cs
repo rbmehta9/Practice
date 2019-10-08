@@ -333,13 +333,107 @@ namespace ScratchPad
             //var e2 = (E2) (int) E1.A1;
             //var e3 = (E2)Enum.Parse(typeof(E2), e1.ToString());
 
-            ABC abc = new ABC(){Id = 1};
-            var i = abc?.Id ?? 0;
+            //ABC abc = new ABC(){Id = 1};
+            //ABC abc1 = null;
+            //var i = abc?.Id ?? 0;
+            //var j = (int) abc1?.E1;
+
+            //int? x = null;
+            //int? y = null;
+            //var b = (x == y);
+            //var b1 = x.Equals(y);
+            //var b2 = EqualityComparer<int?>.Default.Equals(x, y);
+            //ABC a1 = null;
+            //ABC a2 = null;
+            //var b3 = (Object.Equals(a1,a2));
+
+            //var a = new {x = 1, y = 2};
+
+            var a = new List<int>(){1, 2};
+            var b = new List<int>() { 1, 2,3 };
+            //var x = a.Except(b);
+            //var y = b.Except(a);
+            //var prodList = new List<Product>()
+            //{
+            //    new Product() {Id = 1, Name = "prod1"},
+            //    new Product() {Id = 2, Name = "prod2"}
+            //};
+
+            //var prod1 = prodList.First(p => p.Id == 1);
+            //var newProd1 = new Product() {Id = 1, Name = "prod11"};
+
+            //prodList.Remove(prod1);
+            //prodList.Add(newProd1);
+
+            //string a1 = null;
+            //string b1 = null;
+
+            //var f = a1 == b1;
+
+            //string E1int1 = ((int) E1.A1).ToString();
+
+
+            //var x = ABClist.Select(abc => new {pName = dict[abc].Name, abc })
+
+            //(long ShoppingCartItemIdOrLockerItemId, int ServiceId) a11 = (ShoppingCartItemIdOrLockerItemId: 1,
+            //    ServiceId: 1);
+
+            //(long ShoppingCartItemIdOrLockerItemId, int ServiceId) a12 = (ShoppingCartItemIdOrLockerItemId: 1,
+            //    ServiceId: 2);
+
+            //var removeInventoryItemReservations = new Dictionary<(long ShoppingCartItemIdOrLockerItemId, int ServiceId), List<int>>();
+            //removeInventoryItemReservations.Add(a11,new List<int>());
+            //var key1 = removeInventoryItemReservations.Keys.FirstOrDefault(k => k.ServiceId == 2);
+            //var isKey1Found = false;
+            //foreach (var key in removeInventoryItemReservations.Keys)
+            //{
+            //    if (key.ServiceId == 2)
+            //    {
+            //        isKey1Found = true;
+            //        break;
+            //    }
+            //}
+            //var b1 = key1.Equals(null);
+            //var b11 = key1.Equals(default((long, int)));
+            //var b111 = removeInventoryItemReservations.ContainsKey((ShoppingCartItemIdOrLockerItemId: 1, ServiceId: 2));
+            //key1 = default((long, int));
+            //var removeInventoryItemReservations1 = new Dictionary<Tuple<long, int> , List<int>>();
+            //removeInventoryItemReservations1.Add(new Tuple<long, int>(1,1), new List<int>() );
+            //var key2 = removeInventoryItemReservations1.Keys.FirstOrDefault(k => k.Item2 == 2);
+            //var b2 = key2 == null;
+
+            //var b1 = false; var b2 = false;
+            //var b3 = true;
+
+            //var x = b1 && b2 || b3;
+            //var y = b3 || b1 && b2;
+
+            var dc = new DerivedClassTest();
+            //var x = dc as DerivedClassTest;
+            var b1 = Conv(dc);
+
+            bool Conv(BaseClassTest bc)
+            {
+                var x1 = bc as DerivedClassTest1;
+                return x1 != null;
+            }
 
         }
 
+        public class BaseClassTest
+        {
+            public int Id { get; set; }
+        }
 
-        
+        public class DerivedClassTest : BaseClassTest
+        {
+
+        }
+
+        public class DerivedClassTest1 : BaseClassTest
+        {
+
+        }
 
         public enum E1
         {
@@ -356,13 +450,17 @@ namespace ScratchPad
         public class Product
         {
             public int Id { get; set; }
+
+            public string Name { get; set; }
+
             public int Qty { get; set; }
 
-            public  ABC abc { get; set; }
+            public  List<ABC> abc { get; set; }
         }
 
         public class ABC
         {
+            public E1 E1 { get; set; }
             public int? Id { get; set; }
             public string Name { get; set; }
 
