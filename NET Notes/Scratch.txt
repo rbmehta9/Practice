@@ -1,0 +1,157 @@
+IMap<K,V>
+V Get(K Key)
+V Put(K key)
+V Remove(K key)
+int size()
+bool isEMpty()
+Iterable<K,V> KeyValueSet()
+Iterable<K> KeySet()
+Iterable<V> ValueSet()
+
+
+public AbstractMap<K,V> : IMap<K,V>
+{
+  public int isEmpty()
+  {return size() == 0}
+  
+  public class KeyIterator<K> : Iterator<K>
+  {
+     public KeyIterator()
+	 {
+	    _keyValueSet = KeyValueSet();
+	 }
+     public K GetCurrent()
+	 {
+	    return _keyValueSet.GetIterator().Current.Key;
+	 }
+	 
+	 public bool HasNext()
+	 {
+	    return _keyValueSet.GetIterator().HasNext()
+	 }
+	 
+	 public K Next()
+	 {
+	    return _keyValueSet.GetIterator().Next().Key
+	 }
+  }
+  
+  public class KeyIterable<K> : Iterable<k>
+  {
+  
+    public K GetIterator()
+	{
+	   return new KeyIterator();
+	}
+  }
+  
+  public Iterable<K> KeySet()
+  {
+      return new KeyIterable().GetIterator();
+  }
+
+  public abstract Iterable<K,V> KeyValueSet();
+
+
+}
+
+public class UnsortedTableMap<K,V> : AbstractMap<K,V>
+{
+   public class KeyValuePairIterator : Iterator<KeyValuePair<K,V>>
+   {
+      IList<KeyValuePair<K,V> _table;
+	  int position = 0;
+      public KeyValuePairIterator(IList<KeyValuePair<K,V>> keyValuePairs){}
+	  
+	  public KeyValuePair<K,V> GetCurrent()
+	  {
+	     return _table[position];
+	  }
+	  
+	  public bool HasNext(){return position < _table.length -1;}
+	  
+	  public KeyValuePair<K,V> Next(){
+	     if(HasNext()) return _table[++position];
+		 
+		 throw new Exception("");
+	  }
+   }
+   
+   public class KeyValuePairIterable : Iterable<KeyValuePair<k,V>>
+   {
+       public Iterator<K,V> GetIterator()
+	   {
+	       return new KeyValuePairIterator(_table);
+	   }
+   }
+   
+   public Iterable<K,V> override KeyValueSet()
+   {
+      return new KeyValuePairIterable();
+   }
+   
+   public int size()
+   {
+      return _table.Count
+   }
+   
+   public V Put(Key K, Value V)
+   {
+      _table.Add(new KeyValuePair(K,V));
+   }
+   
+   public V Get(Key K)
+   {
+      var index = GetIndex(key K)
+	  
+	  if(index != -1)
+	    return _table[index];
+	  throw new KeyNotFOundException("Key Not Found");
+   }
+   
+   private int GetIndex(Key K)
+   {
+       for(var i = 0; i<size(); i++)
+	  {
+	     if(_table[i].Key == K)
+		   return i;
+	  }
+	  
+	  return -1;
+   }
+   
+   public V Remove(Key K)
+   {
+      var index = GetIndex(key K);
+	  
+	  if(index != -1)
+	  {
+	      var value = _table[index].Value;
+	     _table[index] = _table[size() - 1];
+		 _table.RemoveAt(size() - 1);
+		 return value;
+	  }
+	  
+	  throw new KeyNotFOundException("Key Not Found");
+	  
+   }
+
+}
+
+public class AbstractHashMap<K,V> : AbstractMap<K,V>
+{
+
+   public AbstractHashMap(int capacity, int primefactor){}
+   
+   int GetHash(Key K);
+   
+   abstract V bucketPut(int hash,Key K, V Value);
+   abstract V bucketGet(int hash,K Key);
+   abstract V bucketRemove(int hash,K Key);
+   
+   public override V Get(K Key)
+   {
+       return bucketGet(GetHash(key),key);
+   }
+
+}

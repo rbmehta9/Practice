@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScratchPad", "ScratchPad.csproj", "{13211293-7578-4EFD-A48E-3885303983A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\ConsoleApp1\ConsoleApp1.csproj", "{5A04CF1E-7379-4E6C-AAFC-12F04AE4FDCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{13211293-7578-4EFD-A48E-3885303983A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13211293-7578-4EFD-A48E-3885303983A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13211293-7578-4EFD-A48E-3885303983A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A04CF1E-7379-4E6C-AAFC-12F04AE4FDCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A04CF1E-7379-4E6C-AAFC-12F04AE4FDCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A04CF1E-7379-4E6C-AAFC-12F04AE4FDCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A04CF1E-7379-4E6C-AAFC-12F04AE4FDCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2EB1538E-27E2-41BF-BFC5-7235505237D7}
 	EndGlobalSection
 EndGlobal
