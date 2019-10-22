@@ -31,7 +31,7 @@ namespace HashTable2
 
     public interface IMap<K,V>
     {
-        IEnumerable<int> a;
+        //IEnumerable<int> a;
         int size();
         bool IsEmpty();
         V Add(K key, V value);
