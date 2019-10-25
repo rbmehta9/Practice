@@ -33,6 +33,22 @@ namespace Trees
             InOrder(node.right);
         }
 
+        static void InOrderWithoutRecursion()
+        {
+            var node = root;
+            TraverseLeftOnlyAndPushOnStack(node);
+            Node currentStackELement = null;
+            do
+            {
+                currentStackELement = stack.Peek();
+                stack.Pop();
+                Console.WriteLine($"{currentStackELement.Value}");
+                if (currentStackELement.right != null)
+                    TraverseLeftOnlyAndPushOnStack(currentStackELement.right);
+
+            } while (stack.Count > 0 || currentStackELement.right != null);
+        }
+
         static void PreOrder(Node node)
         {
             if (node == null)
@@ -122,21 +138,7 @@ namespace Trees
             
         }
 
-        static void InOrderWithoutRecursion()
-        {
-            var node = root;
-            TraverseLeftOnlyAndPushOnStack(node);
-            Node currentStackELement = null;
-            do
-            {
-                currentStackELement = stack.Peek();
-                stack.Pop();
-                Console.WriteLine($"{currentStackELement.Value}");
-                if (currentStackELement.right != null)
-                    TraverseLeftOnlyAndPushOnStack(currentStackELement.right);
-
-            } while (stack.Count > 0 || currentStackELement.right != null);
-        }
+        
 
         static void InOrderWithoutRecursion1()
         {
