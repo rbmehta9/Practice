@@ -190,6 +190,8 @@ namespace Trees
             
         }
 
+        //Do a levelorder/BFS traversal and if a node has a left node available then insert the newnode or if the
+        //node has a rightnode available then insert a newnode
         static void Insert(int value)
         {
             var newNode = new Node(value);
@@ -214,6 +216,63 @@ namespace Trees
                 }
 
                 //Console.WriteLine($"Queue size {queue.Count}");
+            }
+        }
+
+        static void Delete(int key)
+        {
+            var currentNode = root;
+            Node nodeToBeDeleted = null;
+            Node poppedNode = null;
+            while (stack.Any() || currentNode != null)
+            {
+                while (currentNode != null)
+                {
+                    stack.Push(currentNode);
+                    if (currentNode.Value == key)
+                        nodeToBeDeleted = currentNode;
+                    currentNode = currentNode.left;
+                }
+
+                poppedNode = stack.Pop();
+                currentNode = poppedNode.right;
+                
+            }
+
+            var bottomMostAndRightMostNode = poppedNode;
+            nodeToBeDeleted.Value = poppedNode.Value;
+            DeleteBottomMostAndRightMostNode(bottomMostAndRightMostNode);
+
+        }
+
+        static void DeleteBottomMostAndRightMostNode(Node bottomMostAndRightMostNode)
+        {
+            var currentNode = root;
+            Node poppedNode = null;
+            while (stack.Any() || currentNode != null)
+            {
+                while (currentNode != null)
+                {
+                    stack.Push(currentNode);
+                    currentNode = currentNode.left;
+                }
+
+                poppedNode = stack.Pop();
+                if (poppedNode.left == bottomMostAndRightMostNode)
+                {
+                    poppedNode.left = null;
+                    break;
+                }
+                else if(poppedNode.right == bottomMostAndRightMostNode)
+                {
+                    poppedNode.right = null;
+                    break;
+                }
+                else
+                {
+                    currentNode = poppedNode.right;
+                }
+
             }
         }
 
@@ -273,15 +332,28 @@ namespace Trees
             //DifferentOrder(root);
 
             //example 4:right side tree only
-            root = new Node(10);
-            root.right = new Node(11);
-            root.right.right = new Node(7);
-            root.right.right.right = new Node(50);
-            PostOrder(root);
-            PostOrderWithoutRecursion();
+            //root = new Node(10);
+            //root.right = new Node(11);
+            //root.right.right = new Node(7);
+            //root.right.right.right = new Node(50);
+            //PostOrder(root);
+            //PostOrderWithoutRecursion();
             //InOrder(root);
             //InOrderWithoutRecursion();
             //DifferentOrder(root);
+
+            root = new Node(10);
+            root.left = new Node(11);
+            root.left.left = new Node(7);
+            root.left.right = new Node(12);
+            root.right = new Node(9);
+            root.right.left = new Node(15);
+            root.right.right = new Node(8);
+            InOrder(root);
+
+            int key = 11;
+            Delete(key);
+            InOrder(root);
 
             Console.ReadLine();
         }
