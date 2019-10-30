@@ -22,12 +22,119 @@ namespace BinarySearchTrees
     {
         private static Node root;
 
-        //public static Node Insert(int key, string Value, Node node)
-        //{
-        //    if (node == null)
-        //        return new Node(key, Value);
+        public static Node Insert(int key, string Value, Node node)
+        {
+            if (node == null)
+                return new Node(key, Value);
+            else if (key < node.Key)
+                node.Left = Insert(key, Value, node.Left);
+            else if (key > node.Key)
+                node.Right = Insert(key, Value, node.Right);
 
-        //}
+            return node;
+
+        }
+
+        public static Node InsertWithoutRecursion(int key, string value, Node node)
+        {
+            Node currentNode = root;
+            Node prevNode = null;
+            while (currentNode != null)
+            {
+                if (key == currentNode.Key)
+                {
+                    currentNode.Value = value;
+                    return currentNode;
+                }
+                else if (key < currentNode.Key)
+                {
+                    prevNode = currentNode;
+                    currentNode = currentNode.Left;
+                }
+                else
+                {
+                    prevNode = currentNode;
+                    currentNode = currentNode.Right;
+                }
+            }
+
+            var newNode = new Node(key, value);
+            if (key < prevNode.Key)
+                prevNode.Left = newNode;
+            else
+            {
+                prevNode.Right = newNode;
+            }
+
+            return newNode;
+
+        }
+
+        public static Node InsertWithoutRecursion1(int key, string value, Node node)
+        {
+            if (root == null)
+            {
+                root = new Node(key, value);
+                return root;
+            }
+
+            Node currentNode = root;
+            Node newNode = null;
+            while (currentNode != null)
+            {
+                
+                if (key == currentNode.Key)
+                {
+                    currentNode.Value = value;
+                    return currentNode;
+                }
+                else if (key < currentNode.Key)
+                {
+                    if (currentNode.Left == null)
+                    {
+                        newNode = new Node(key, value);
+                        currentNode.Left = newNode;
+                        break;
+                    }
+                    else
+                        currentNode = currentNode.Left;
+                }
+                else
+                {
+                    if (currentNode.Right == null)
+                    {
+                        newNode = new Node(key, value);
+                        currentNode.Right = newNode;
+                        break;
+                    }
+                    else
+                        currentNode = currentNode.Right;
+                }
+            }
+
+            return newNode;
+
+        }
+
+        public static Node BinarySearchWithoutRecursion(int key, Node node)
+        {
+            Node currentNode = root;
+            while (currentNode != null)
+            {
+                if (key == currentNode.Key)
+                    return currentNode;
+                else if(key < currentNode.Key)
+                {
+                    currentNode = currentNode.Left;
+                }
+                else
+                {
+                    currentNode = currentNode.Right;
+                }
+            }
+
+            return currentNode;
+        }
 
         /// <summary>
         /// Returns the node upon searching the key. if key does not exist returns null
@@ -67,7 +174,11 @@ namespace BinarySearchTrees
             root.Right.Right = new Node(97, "97");
             root.Right.Right.Left = new Node(93, "93");
 
-            var searchedNode = BinarySearch(65, root);
+            //var searchedNode = BinarySearch(65, root);
+            //searchedNode = BinarySearchWithoutRecursion(65, root);
+            //searchedNode = BinarySearchWithoutRecursion(68, root);
+
+            var node = InsertWithoutRecursion1(68, "68", root);
         }
     }
 }
