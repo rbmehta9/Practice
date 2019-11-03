@@ -22,6 +22,27 @@ namespace Trees
             }
         }
 
+        static bool isUniValTree(Node node)
+        {
+            if (node == null)
+                return true;
+
+            var isUniValLeft = isUniValTree(node.left);
+            var isUniValRight = isUniValTree(node.right);
+
+            if (isUniValLeft && isUniValRight &&
+                (node.left == null || node.left.Value == node.Value) &&
+                (node.right == null || node.right.Value == node.Value))
+            {
+                numofUniValTrees++;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static int numofUniValTrees;
+
         static void InOrder(Node node)
         {
             if (node == null)
@@ -341,19 +362,47 @@ namespace Trees
             //InOrderWithoutRecursion();
             //DifferentOrder(root);
 
-            root = new Node(10);
-            root.left = new Node(11);
-            root.left.left = new Node(7);
-            root.left.right = new Node(12);
-            root.right = new Node(9);
-            root.right.left = new Node(15);
-            root.right.right = new Node(8);
-            InOrder(root);
+            //root = new Node(10);
+            //root.left = new Node(11);
+            //root.left.left = new Node(7);
+            //root.left.right = new Node(12);
+            //root.right = new Node(9);
+            //root.right.left = new Node(15);
+            //root.right.right = new Node(8);
+            //InOrder(root);
 
-            int key = 11;
-            Delete(key);
-            InOrder(root);
+            //int key = 11;
+            //Delete(key);
+            //InOrder(root);
 
+            //Only for unival tree test
+            root = new Node(44);
+            root.left = new Node(32);
+            root.left.left = new Node(32);
+            root.left.left.left = new Node(24);
+            root.left.left.left.left = new Node(24);
+            root.left.left.left.right = new Node(24);
+
+            root.left.left.right = new Node(26);
+            root.left.left.right.left = new Node(26);
+            root.left.left.right.right = new Node(26);
+
+            root.right = new Node(55);
+            root.right.left = new Node(48);
+            root.right.left.left = new Node(48);
+            root.right.left.right = new Node(48);
+
+            root.right.left.left.left = new Node(48);
+            root.right.left.left.right = new Node(48);
+
+            root.right.left.right.left = new Node(48);
+            root.right.left.right.right = new Node(48);
+
+            root.right.right = new Node(51);
+            root.right.right.left = new Node(51);
+            root.right.right.right = new Node(51);
+            var isunival = isUniValTree(root);
+            Console.WriteLine($"Number of Unival Trees {numofUniValTrees}");
             Console.ReadLine();
         }
     }
