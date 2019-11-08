@@ -82,6 +82,31 @@ namespace ArrayProblems
             PrintAllBinaryUtil(numofDigits, subset, i + 1);
         }
 
+        public static void PrintAllThreeary(int numofDigits)
+        {
+            var subset = new int?[numofDigits];
+            PrintAllThreeArytil(numofDigits, subset, 0);
+        }
+
+        public static void PrintAllThreeArytil(int numofDigits, int?[] subset, int i)
+        {
+            if (i == numofDigits)
+            {
+                Console.WriteLine(PrintSubsets(subset));
+                return;
+            }
+
+            subset[i] = 0;
+            PrintAllThreeArytil(numofDigits, subset, i + 1);
+
+            subset[i] = 1;
+            PrintAllThreeArytil(numofDigits, subset, i + 1);
+
+            subset[i] = 2;
+            PrintAllThreeArytil(numofDigits, subset, i + 1);
+
+        }
+
         public static string PrintSubsets(int?[] subset, bool isPrinting = true)
         {
             var str = string.Empty;
@@ -110,7 +135,9 @@ namespace ArrayProblems
         {
             //FindSubsets.FindAllSubsets(new []{0,1,2});
 
-            BinaryBits.PrintAllBinary(5);
+            //BinaryBits.PrintAllBinary(5);
+
+            //BinaryBits.PrintAllThreeary(3);
 
             Console.ReadLine();
         }
