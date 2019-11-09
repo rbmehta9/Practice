@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArrayProblems", "ArrayProblems.csproj", "{271BECAA-D72E-452D-8DE6-9F3A6072432E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntersectionofArrays", "..\IntersectionofArrays\IntersectionofArrays.csproj", "{1E41927E-402C-4073-81A1-F28C76D54547}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{271BECAA-D72E-452D-8DE6-9F3A6072432E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{271BECAA-D72E-452D-8DE6-9F3A6072432E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{271BECAA-D72E-452D-8DE6-9F3A6072432E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E41927E-402C-4073-81A1-F28C76D54547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E41927E-402C-4073-81A1-F28C76D54547}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E41927E-402C-4073-81A1-F28C76D54547}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E41927E-402C-4073-81A1-F28C76D54547}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
