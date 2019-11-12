@@ -1,0 +1,5 @@
+Intersection of Arrays
+Largest area in a histogram
+Pascals triangle
+Check loop in array
+FindAllSubsets
