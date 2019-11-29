@@ -459,7 +459,7 @@ namespace Trees
         static bool IsSymmetric(Node node)
         {
             if (node == null)
-                return false;
+                return true;
 
             return IsSymmetric(node.left, node.right);
         }
