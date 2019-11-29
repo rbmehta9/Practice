@@ -41,6 +41,32 @@ namespace Trees
             return false;
         }
 
+        static bool IsValidBST(Node node)
+        {
+            var currentNode = node;
+            Node prevVisitedNode = null;
+            while (stack.Count > 0 || currentNode!=null)
+            {
+                var tempNode = currentNode;
+                while (tempNode != null)
+                {
+                    stack.Push(tempNode);
+                    tempNode = tempNode.left;
+                }
+
+                var poppedNode = stack.Pop();
+                if (poppedNode.Value <= prevVisitedNode.Value)
+                    return false;
+
+                prevVisitedNode = poppedNode;
+                currentNode = poppedNode.right;
+
+            }
+
+            return true;
+
+        }
+
         private static int numofUniValTrees;
 
         static void InOrder(Node node)
@@ -171,6 +197,44 @@ namespace Trees
             
         }
 
+        public static IList<int> PostorderTraversal(Node root)
+        {
+            var output = new List<int>();
+            var currentNode = root;
+            var stack = new Stack<Node>();
+            Node prevPoppedNode = null;
+            while (stack.Count > 0 || currentNode != null)
+            {
+                var tempNode = currentNode;
+                while (tempNode != null)
+                {
+                    stack.Push(tempNode);
+                    tempNode = tempNode.left;
+                }
+
+                var lastNode = stack.Peek();
+                if (lastNode.right == null || lastNode.right == prevPoppedNode)
+                {
+                    stack.Pop();
+                    output.Add(lastNode.Value);
+                    prevPoppedNode = lastNode;
+                }
+
+                if (lastNode == root && stack.Count == 0)
+                    break;
+
+                if(stack.Peek() == lastNode)
+                 currentNode = lastNode.right;
+                else
+                {
+                    currentNode = null;
+                }
+
+            }
+
+            return output;
+        }
+
         static Node TraverseLeftOnlyAndPushOnStack(Node parentNode)
         {
             if (parentNode == null)
@@ -218,7 +282,7 @@ namespace Trees
             var currentNode = root;
             var queue = new Queue<Node>();
             queue.Enqueue(currentNode);
-            while (queue.Count > 0)
+            while (queue.Any())
             {
                 var temp = queue.Peek();
                 queue.Dequeue();
@@ -237,6 +301,90 @@ namespace Trees
 
                 //Console.WriteLine($"Queue size {queue.Count}");
             }
+        }
+
+        static IList<IList<int>> LevelOrderTraversal()
+        {
+            var output = new List<IList<int>>();
+            var currentNode = root;
+            var queue = new Queue<Node>();
+            queue.Enqueue(root);
+            Node firstNextLevelNode = root;
+            while (queue.Any())
+            {
+                var firstNode = queue.Dequeue();
+                IList<int> currentList = null;
+                if (firstNode == firstNextLevelNode)
+                {
+                    currentList = new List<int>();
+                    output.Add(currentList);
+                }
+                else
+                {
+                    currentList = output[output.Count - 1];
+                }
+
+                currentList.Add(firstNode.Value);
+                
+
+                if (firstNode.left != null && firstNode.right != null)
+                {
+                    queue.Enqueue(firstNode.left);
+                    queue.Enqueue(firstNode.right);
+                    if(firstNextLevelNode == null || firstNode == firstNextLevelNode)
+                    firstNextLevelNode = firstNode.left;
+                }
+                else if (firstNode.left != null)
+                {
+                    queue.Enqueue(firstNode.left);
+                    if (firstNextLevelNode == null || firstNode == firstNextLevelNode)
+                        firstNextLevelNode = firstNode.left;
+                }
+                else if (firstNode.right != null)
+                {
+                    queue.Enqueue(firstNode.right);
+                    if (firstNextLevelNode == null || firstNode == firstNextLevelNode)
+                        firstNextLevelNode = firstNode.right;
+                }
+                else
+                {
+                    if (firstNextLevelNode == null || firstNode == firstNextLevelNode)
+                        firstNextLevelNode = null;
+                }
+
+                
+
+            }
+
+            return output;
+        }
+
+        static IList<IList<int>> LevelOrderTraversal1()
+        {
+            var output = new List<IList<int>>();
+            var currentNode = root;
+            var queue = new Queue<Node>();
+            queue.Enqueue(root);
+            while (queue.Any())
+            {
+                var lst = new List<int>();
+                output.Add(lst);
+                var size = queue.Count;
+                for (int i = 0; i < size; i++)
+                {
+                    var firstNodeInQueue = queue.Dequeue();
+                    lst.Add(firstNodeInQueue.Value);
+                    if (firstNodeInQueue.left != null)
+                        queue.Enqueue(firstNodeInQueue.left);
+                    if (firstNodeInQueue.right != null)
+                        queue.Enqueue(firstNodeInQueue.right);
+
+                }
+
+
+            }
+
+            return output;
         }
 
         static void Delete(int key)
@@ -296,6 +444,26 @@ namespace Trees
             }
         }
 
+        static bool IsSymmetric(Node leftNode, Node rightNode)
+        {
+            if (leftNode == null && rightNode == null)
+                return true;
+            else if (leftNode == null || rightNode == null)
+                return false;
+            return leftNode.Value == rightNode.Value &&
+                   IsSymmetric(leftNode.left, rightNode.right) &&
+                   IsSymmetric(leftNode.right, rightNode.left);
+
+        }
+
+        static bool IsSymmetric(Node node)
+        {
+            if (node == null)
+                return false;
+
+            return IsSymmetric(node.left, node.right);
+        }
+
         static Node root;
 
         static Stack<Node> stack = new Stack<Node>();
@@ -325,6 +493,7 @@ namespace Trees
             //root.right = new Node(9);
             //root.right.left = new Node(15);
             //root.right.right = new Node(8);
+            //LevelOrderTraversal1();
             //PreOrder(root);
             //PreOrderWithoutRecursion();
             //PostOrder(root);
@@ -376,33 +545,91 @@ namespace Trees
             //InOrder(root);
 
             //Only for unival tree test
-            root = new Node(44);
-            root.left = new Node(32);
-            root.left.left = new Node(32);
-            root.left.left.left = new Node(24);
-            root.left.left.left.left = new Node(24);
-            root.left.left.left.right = new Node(24);
+            //root = new Node(44);
+            //root.left = new Node(32);
+            //root.left.left = new Node(32);
+            //root.left.left.left = new Node(24);
+            //root.left.left.left.left = new Node(24);
+            //root.left.left.left.right = new Node(24);
 
-            root.left.left.right = new Node(26);
-            root.left.left.right.left = new Node(26);
-            root.left.left.right.right = new Node(26);
+            //root.left.left.right = new Node(26);
+            //root.left.left.right.left = new Node(26);
+            //root.left.left.right.right = new Node(26);
 
-            root.right = new Node(55);
-            root.right.left = new Node(48);
-            root.right.left.left = new Node(48);
-            root.right.left.right = new Node(48);
+            //root.right = new Node(55);
+            //root.right.left = new Node(48);
+            //root.right.left.left = new Node(48);
+            //root.right.left.right = new Node(48);
 
-            root.right.left.left.left = new Node(48);
-            root.right.left.left.right = new Node(48);
+            //root.right.left.left.left = new Node(48);
+            //root.right.left.left.right = new Node(48);
 
-            root.right.left.right.left = new Node(48);
-            root.right.left.right.right = new Node(48);
+            //root.right.left.right.left = new Node(48);
+            //root.right.left.right.right = new Node(48);
 
-            root.right.right = new Node(51);
-            root.right.right.left = new Node(51);
-            root.right.right.right = new Node(51);
-            var isunival = isUniValTree(root);
-            Console.WriteLine($"Number of Unival Trees {numofUniValTrees}");
+            //root.right.right = new Node(51);
+            //root.right.right.left = new Node(51);
+            //root.right.right.right = new Node(51);
+            //var isunival = isUniValTree(root);
+            //Console.WriteLine($"Number of Unival Trees {numofUniValTrees}");
+
+            //root = new Node(3);
+            //root.left = new Node(1);
+            //root.left.right = new Node(2);
+            //var a = PostorderTraversal(root);
+
+            //root = new Node(1);
+            //root.left = new Node(2);
+            //root.right = new Node(2);
+
+            //root.left.left = new Node(3);
+            //root.right.right =  new Node(3);
+
+            //root.left.right = new Node(4);
+            //root.right.left = new Node(4);
+
+            //root.left.left.left = new Node(5);
+            //root.right.right.right = new Node(5);
+
+            //root.left.left.right = new Node(6);
+            //root.right.right.left = new Node(6);
+
+            //root.left.right.left = new Node(7);
+            //root.right.left.right = new Node(7);
+
+            //root.left.right.right = new Node(8);
+            //root.right.left.left = new Node(8);
+            //var isSymmetric = IsSymmetric(root);
+
+            //root = new Node(1);
+            //root.left = new Node(2);
+            //root.right = new Node(2);
+
+            //root.left.left = new Node(3);
+            //root.right.right = new Node(3);
+
+            //root.left.right = new Node(20);
+            //root.right.left = new Node(4);
+
+            //root.left.left.left = new Node(5);
+            //root.right.right.right = new Node(5);
+
+            //root.left.left.right = new Node(6);
+            //root.right.right.left = new Node(6);
+
+            //root.left.right.left = new Node(7);
+            //root.right.left.right = new Node(7);
+
+            //root.left.right.right = new Node(8);
+            //root.right.left.left = new Node(8);
+
+            //isSymmetric = IsSymmetric(root);
+
+            //root = new Node(1);
+            //root.left = new Node(2);
+            //root.right = new Node(3);
+            //var isSymmetric = IsSymmetric(root);
+
             Console.ReadLine();
         }
     }
