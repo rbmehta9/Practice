@@ -464,6 +464,14 @@ namespace Trees
             return IsSymmetric(node.left, node.right);
         }
 
+        static int FindMaximumDepthofBinaryTree(Node node)
+        {
+            if (node == null)
+                return 0;
+
+            return Math.Max(FindMaximumDepthofBinaryTree(node.left), FindMaximumDepthofBinaryTree(node.right)) + 1;
+        }
+
         static Node root;
 
         static Stack<Node> stack = new Stack<Node>();
@@ -480,19 +488,19 @@ namespace Trees
             //root.right.right = new Node(8);
 
             //example 2
-            //root = new Node(10);
-            //root.left = new Node(11);
-            //root.left.left = new Node(7);
-            //root.left.left.right = new Node(6);
-            //root.left.left.right.left = new Node(18);
-            //root.left.left.right.right = new Node(19);
-            //root.left.left.right.left.right = new Node(25);
-            //root.left.right = new Node(12);
-            //root.left.right.left = new Node(13);
-            //root.left.right.right = new Node(14);
-            //root.right = new Node(9);
-            //root.right.left = new Node(15);
-            //root.right.right = new Node(8);
+            root = new Node(10);
+            root.left = new Node(11);
+            root.left.left = new Node(7);
+            root.left.left.right = new Node(6);
+            root.left.left.right.left = new Node(18);
+            root.left.left.right.right = new Node(19);
+            root.left.left.right.left.right = new Node(25);
+            root.left.right = new Node(12);
+            root.left.right.left = new Node(13);
+            root.left.right.right = new Node(14);
+            root.right = new Node(9);
+            root.right.left = new Node(15);
+            root.right.right = new Node(8);
             //LevelOrderTraversal1();
             //PreOrder(root);
             //PreOrderWithoutRecursion();
@@ -507,6 +515,7 @@ namespace Trees
             //Insert(55);
             //Console.WriteLine("After Insert Inorder");
             //InOrder1(root);
+            var maxdepth = FindMaximumDepthofBinaryTree(root);
 
 
             //example 3:left sides tree only
