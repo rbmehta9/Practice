@@ -41,6 +41,20 @@ namespace Trees
             return false;
         }
 
+        public int CountUnivalSubtrees(Node root)
+        {
+            if (root == null) return 0;
+
+            var isUnival = (root.left == null || root.left.Value == root.Value) &&
+                           (root.right == null || root.right.Value == root.Value);
+
+
+            return CountUnivalSubtrees(root.left) +
+                   CountUnivalSubtrees(root.right) +
+                   Convert.ToInt32(isUnival);
+
+        }
+
         static bool IsValidBST(Node node)
         {
             var currentNode = node;
@@ -105,6 +119,72 @@ namespace Trees
                 stack.Pop();
                 Console.WriteLine($"{node.Value}");
                 node = node.right;
+            }
+        }
+
+        static bool HasPathSum(Node node, int SUM)
+        {
+            if (node == null)
+                return false;
+            var currentNode = node;
+            var currentSum = 0;
+            Node lastPoppedNode = null;
+            while (stack.Any() || currentNode != null)
+            {
+                var tempNode = currentNode;
+                while (tempNode!=null)
+                {
+                    stack.Push(tempNode);
+                    currentSum += tempNode.Value;
+                    tempNode = tempNode.left;
+                }
+
+                if(currentSum == SUM && isLeafNode(stack.Peek()))
+                    break;
+
+                if (stack.Peek().right == null || stack.Peek().right == lastPoppedNode)
+                {
+                    lastPoppedNode = stack.Pop();
+                    currentSum -= lastPoppedNode.Value;
+                    currentNode = null;
+                }
+                else
+                {
+                    currentNode = stack.Peek().right;
+                }
+
+            }
+
+            return !isEmptyTree() && lastPoppedNode != root && currentSum == SUM;
+
+            bool isEmptyTree()
+            {
+                return root == null;
+            }
+
+            bool isLeafNode(Node node1)
+            {
+                return node1 == null || (node1.right == null && node1.left == null);
+            }
+
+        }
+
+        static bool HasPathSumWithRecursion(Node node, int SUM)
+        {
+            if (root == null)
+                return false;
+
+            if (isLeafNode(node))
+            {
+                return node.Value == SUM;
+            }
+
+            return HasPathSumWithRecursion(node.left, SUM - node.Value) ||
+                   HasPathSumWithRecursion(node.right, SUM - node.Value);
+
+            bool isLeafNode(Node node1)
+            {
+                return node1 == null || (node1.right == null && node1.left == null);
             }
         }
 
@@ -234,6 +314,8 @@ namespace Trees
 
             return output;
         }
+
+
 
         static Node TraverseLeftOnlyAndPushOnStack(Node parentNode)
         {
@@ -472,9 +554,86 @@ namespace Trees
             return Math.Max(FindMaximumDepthofBinaryTree(node.left), FindMaximumDepthofBinaryTree(node.right)) + 1;
         }
 
+        /*Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.*/
+        static List<Node> FindPathSum(Node node, int SUM)
+        {
+            if (node.Value > SUM)
+                return new List<Node>();
+
+            stack.Push(node);
+            Node lastPoppedNode = null;
+            var currentSum = node.Value;
+            while(stack.Any() || currentSum != SUM)
+            {
+                var peekNode = stack.Peek();
+                if  (
+                      lastPoppedNode == null || 
+                      (peekNode.left != null && peekNode.left != lastPoppedNode && peekNode.right != null && peekNode.right != lastPoppedNode)
+                    )
+                {
+                    if(peekNode.left.Value + currentSum <= SUM)
+                    {
+                        stack.Push(peekNode.left);
+                        currentSum += peekNode.left.Value;
+                    }
+                    
+                }
+                else if(peekNode.left == lastPoppedNode)
+                {
+                    if (peekNode.right.Value + currentSum <= SUM)
+                    {
+                        stack.Push(peekNode.right);
+                        currentSum += peekNode.right.Value;
+                    }
+                    else
+                    {
+                        lastPoppedNode = stack.Pop();
+                        currentSum -= lastPoppedNode.Value;
+                    }
+                }
+                else if (peekNode.right == lastPoppedNode)
+                {
+                    lastPoppedNode = stack.Pop();
+                    currentSum -= lastPoppedNode.Value;
+                }
+            }
+
+            var path = new List<Node>(stack.Count);
+            var i = stack.Count - 1;
+            while(stack.Any())
+            {
+                path[i] = stack.Pop();
+                i--;
+            }
+
+            return path;
+        }
+
         static Node root;
 
         static Stack<Node> stack = new Stack<Node>();
+
+        static Node ConvertArrayToTree(int?[] array)
+        {
+            Node root = null;
+            if (array.Length == 0)
+                return null;
+
+            Node lastNode = null;
+
+
+            for (var i = 0; i < array.Length; i++)
+            {
+                if (i == 0)
+                {
+                    root = new Node(array[i].Value);
+                    lastNode = root;
+                }
+            }
+
+            return root;
+        }
+
         static void Main(string[] args)
         {
             //example 1
@@ -501,6 +660,12 @@ namespace Trees
             root.right = new Node(9);
             root.right.left = new Node(15);
             root.right.right = new Node(8);
+            var isSumPresent = HasPathSum(root, 47);
+
+            //root = new Node(1);
+            //root.left = new Node(2);
+            //var isSumPresent = HasPathSum(root, 1);
+            Console.ReadLine();
             //LevelOrderTraversal1();
             //PreOrder(root);
             //PreOrderWithoutRecursion();
@@ -515,7 +680,7 @@ namespace Trees
             //Insert(55);
             //Console.WriteLine("After Insert Inorder");
             //InOrder1(root);
-            var maxdepth = FindMaximumDepthofBinaryTree(root);
+            //var maxdepth = FindMaximumDepthofBinaryTree(root);
 
 
             //example 3:left sides tree only
@@ -639,7 +804,7 @@ namespace Trees
             //root.right = new Node(3);
             //var isSymmetric = IsSymmetric(root);
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }
