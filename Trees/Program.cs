@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,7 +42,7 @@ namespace Trees
             return false;
         }
 
-        public int CountUnivalSubtrees(Node root)
+        public static int CountUnivalSubtrees(Node root)
         {
             if (root == null) return 0;
 
@@ -613,25 +614,421 @@ namespace Trees
 
         static Stack<Node> stack = new Stack<Node>();
 
-        static Node ConvertArrayToTree(int?[] array)
+        static List<List<int?>> ConvertArrayToLevelLists(int?[] array)
         {
             Node root = null;
             if (array.Length == 0)
+                return new List<List<int?>>();
+
+            var levelLists = new List<List<int?>>();
+            var previousList = new List<int?>() {array[0]};
+            levelLists.Add(previousList);
+            var lastIndex = 0;
+
+            while (lastIndex < array.Length - 1)
+            {
+                var newList = new List<int?>();
+                var count = previousList.Count(p => p.HasValue)*2;
+                if (count + lastIndex + 1 > array.Length - 1)
+                    count = array.Length - lastIndex - 1;
+                newList.AddRange(array.ToList().GetRange(lastIndex + 1, count));
+                lastIndex = lastIndex + count;
+                previousList = newList;
+                levelLists.Add(newList);
+            }
+
+            return levelLists;
+        }
+
+        static Node ConvertArrayToTree(int?[] array)
+        {
+            var levelLists = ConvertArrayToLevelLists(array);
+            if (levelLists == null || !levelLists.Any())
                 return null;
 
-            Node lastNode = null;
-
-
-            for (var i = 0; i < array.Length; i++)
+            root = new Node(levelLists[0][0].Value);
+            var lastNodeList = new List<Node>() {root};
+            for (var i = 1; i < levelLists.Count; i++)
             {
-                if (i == 0)
+                //var listWithOutNull = levelLists[i - 1].Where(l => l.HasValue).ToList();
+                var nextLevelList = levelLists[i];
+                var cnt = lastNodeList.Count;
+                var newNodeList = new List<Node>();
+                for (int j = 0; j < cnt; j++)
                 {
-                    root = new Node(array[i].Value);
-                    lastNode = root;
+
+                    var node = lastNodeList[j];
+                    if (2*j <= nextLevelList.Count - 1 && nextLevelList[2 * j].HasValue)
+                    {
+                        node.left = new Node(nextLevelList[2 * j].Value);
+                        newNodeList.Add(node.left);
+                    }
+
+                    if ((2 * j + 1) <= nextLevelList.Count - 1 && nextLevelList[2 * j + 1].HasValue)
+                    {
+                        node.right = new Node(nextLevelList[2 * j + 1].Value);
+                        newNodeList.Add(node.right);
+                    }
+
+
+                    
+
                 }
+
+                lastNodeList = newNodeList;
             }
 
             return root;
+        }
+
+        public static Node deserialize(string data)
+        {
+            
+            var substr = data.Substring(1, data.Length - 2);
+            if (string.IsNullOrEmpty(substr)) return null;
+            var ints = substr.Split(',').Select(s => (s == "null")? (int?)null : Convert.ToInt32(s)).ToArray();
+            return ConvertArrayToTree(ints);
+        }
+
+        public static Node BuildTree1(int[] preOrder, int[] inOrder)
+        {
+            return BuildTree1(preOrder.ToList(), inOrder.ToList());
+        }
+
+        public static Node BuildTree1(List<int> preOrder, List<int> inOrder)
+        {
+            if (preOrder.Count == 0)
+                return null;
+
+            var rootNode = new Node(preOrder[0]);
+            var leftRightSubArr = GetInOrderSubArray(rootNode.Value, inOrder);
+            var preOrderLeftSubArr = GetPreOrderSubArray(leftRightSubArr.LeftSubArray, preOrder);
+            var preOrderRightSubArr = GetPreOrderSubArray(leftRightSubArr.RightSubArray, preOrder);
+            rootNode.left = BuildTree1(preOrderLeftSubArr, leftRightSubArr.LeftSubArray);
+            rootNode.right = BuildTree1(preOrderRightSubArr, leftRightSubArr.RightSubArray);
+
+            return rootNode;
+
+            LeftRightSubArrays GetInOrderSubArray(int val, List<int> arr)
+            {
+                var leftRightSubArrays = new LeftRightSubArrays()
+                {
+                    LeftSubArray = new List<int>(),
+                    RightSubArray = new List<int>()
+                };
+                var isLeft = true;
+                for (var i = 0; i < arr.Count; i++)
+                {
+                    if(arr[i] != val && isLeft)
+                        leftRightSubArrays.LeftSubArray.Add(arr[i]);
+                    else if(arr[i] == val)
+                    {
+                        isLeft = false;
+                    }
+                    else
+                    {
+                        leftRightSubArrays.RightSubArray.Add(arr[i]);
+                    }
+                }
+
+                return leftRightSubArrays;
+            }
+
+            List<int> GetPreOrderSubArray(List<int> inOrderSubArr, List<int> arr)
+            {
+                var hasSet = new HashSet<int>();
+                var subList = new List<int>();
+                inOrderSubArr.ToList().ForEach(i => hasSet.Add(i));
+                arr.ForEach(p =>
+                {
+                    if (hasSet.Contains(p))
+                        subList.Add(p);
+                });
+
+                return subList;
+            }
+
+        }
+
+        
+
+        private class LeftRightSubArrays
+        {
+            public List<int> LeftSubArray { get; set; }
+            public List<int> RightSubArray { get; set; }
+        }
+
+        public static Node BuildTree(int[] inorder, int[] postorder)
+        {
+            return BuildTree(inorder.ToList(), postorder.ToList());
+        }
+
+        public static Node BuildTree(List<int> inorder, List<int> postorder)
+        {
+            if (inorder.Count == 0)
+                return null;
+
+            var rootNode = new Node(postorder[postorder.Count - 1]);
+            var leftRightInOrderSubArrays = GetInOrderSubArrays(rootNode.Value);
+            var leftRightPostOrderSubArrays = GetPostOrderSubArrays(leftRightInOrderSubArrays);
+            rootNode.left = BuildTree(leftRightInOrderSubArrays.LeftSubArray, leftRightPostOrderSubArrays.LeftSubArray);
+            rootNode.right = BuildTree(leftRightInOrderSubArrays.RightSubArray, leftRightPostOrderSubArrays.RightSubArray);
+
+            return rootNode;
+
+            LeftRightSubArrays GetInOrderSubArrays(int val)
+            {
+                var leftList = new List<int>();
+                var rightList = new List<int>();
+                var elemFound = false;
+                for (int i = 0; i < inorder.Count; i++)
+                {
+                    if (inorder[i] == val)
+                        elemFound = true;
+                    if(!elemFound)
+                        leftList.Add(inorder[i]);
+                    else if(inorder[i] != val)
+                        rightList.Add(inorder[i]);
+                }
+
+                return new LeftRightSubArrays()
+                {
+                    LeftSubArray = leftList,
+                    RightSubArray = rightList
+                };
+
+            }
+
+            LeftRightSubArrays GetPostOrderSubArrays(LeftRightSubArrays inOrderSubArrays)
+            {
+                return new LeftRightSubArrays()
+                {
+                    LeftSubArray = GetPostOrderSubArray(inOrderSubArrays.LeftSubArray),
+                    RightSubArray = GetPostOrderSubArray(inOrderSubArrays.RightSubArray)
+                };
+            }
+
+            List<int> GetPostOrderSubArray(List<int> inOrderList)
+            {
+                var hasSet = new HashSet<int>();
+                var subList = new List<int>();
+                inOrderList.ForEach(i => hasSet.Add(i));
+                postorder.ForEach(p =>
+                {
+                    if(hasSet.Contains(p))
+                        subList.Add(p);
+                });
+
+                return subList;
+            }
+
+        }
+
+        public static Node BuildTree3(int[] inOrder, int[] preOrder)
+        {
+            var inOrderDictionary = new Dictionary<int, int>();
+            int idx = 0;
+            foreach (var i in inOrder)
+                inOrderDictionary.Add(i, idx++);
+
+            return Helper3(0, inOrder.Length, preOrder, inOrderDictionary);
+        }
+
+        public static int preOrderPosition = 0;
+
+        public static Node Helper3(int start, int end, int[] preOrder, Dictionary<int, int> inOrderDictionary)
+        {
+            if (start == end)
+                return null;
+            var rootNode = new Node(preOrder[preOrderPosition]);
+
+            var rootPosition = inOrderDictionary[rootNode.Value];
+            preOrderPosition++;
+            rootNode.left = Helper3(start, rootPosition, preOrder, inOrderDictionary);
+            rootNode.right = Helper3(rootPosition + 1, end, preOrder, inOrderDictionary);
+
+            return rootNode;
+        }
+
+        public static int postOrderPosition = 4;
+        public static Node BuildTree4(int[] inorder, int[] postorder)
+        {
+            var inOrderDictionary = new Dictionary<int, int>();
+            int idx = 0;
+            foreach (var i in inorder)
+                inOrderDictionary.Add(i, idx++);
+
+            return Helper4(0, postorder.Length, postorder, inOrderDictionary);
+        }
+
+        public static Node Helper4(int start, int end, int[] postOrder, Dictionary<int, int> inOrderDictionary)
+        {
+            if (start == end)
+                return null;
+
+            var rootNode = new Node(postOrder[postOrderPosition]);
+            var rootPosition = inOrderDictionary[rootNode.Value];
+            postOrderPosition--;
+            
+            rootNode.right = Helper4(rootPosition + 1, end, postOrder, inOrderDictionary);
+            rootNode.left = Helper4(start, rootPosition, postOrder, inOrderDictionary);
+
+            return rootNode;
+        }
+
+        public static bool IsSubTree(Node root, Node subTreeToCompare)
+        {
+            if (AreTreesEqual(root, subTreeToCompare))
+                return true;
+            else if (root != null && IsSubTree(root.left, subTreeToCompare))
+                return true;
+            else if (root != null && IsSubTree(root.right, subTreeToCompare))
+                return true;
+
+            return false;
+        }
+
+        public static bool AreTreesEqual(Node subTree, Node subTreeToCompare)
+        {
+            if (
+                (subTree != null && subTreeToCompare != null && subTree.Value != subTreeToCompare.Value) ||
+                (subTree == null && subTreeToCompare != null) ||
+                (subTree != null && subTreeToCompare == null)
+
+            )
+                return false;
+            else if (subTree == null && subTreeToCompare == null)
+                return true;
+
+            return AreTreesEqual(subTree.left, subTreeToCompare.left) &&
+                   AreTreesEqual(subTree.right, subTreeToCompare.right);
+
+        }
+
+        public static Node LowestCommonAncestor(Node root, Node p, Node q)
+        {
+            var currentNode = root;
+            var firstNodeFound = false;
+            Node prevNode = null;
+            var hashSet = new HashSet<Node>();
+            while (stack.Any() || currentNode != null)
+            {
+                while (currentNode != null)
+                {
+                    stack.Push(currentNode);
+                    if (!firstNodeFound)
+                    {
+                        hashSet.Add(currentNode);
+                        if (IsOneofTheTwo())
+                            firstNodeFound = true;
+                    }
+                    else if (IsOneofTheTwo())
+                    {
+                        return FindLca();
+                    }
+
+                    currentNode = currentNode.left;
+                }
+
+                var stackPeekRight = stack.Peek().right;
+                if (stackPeekRight == null || stack.Peek().right == prevNode)
+                {
+                    prevNode = stack.Pop();
+                    if (!firstNodeFound)
+                    {
+                        hashSet.Remove(prevNode);
+                    }
+                }
+                else
+                {
+                    currentNode = stack.Peek().right;
+                }
+            }
+
+            bool IsOneofTheTwo()
+            {
+                return currentNode == p || currentNode == q;
+            }
+
+            Node FindLca()
+            {
+                Node poppedNode = null;
+                while (!hashSet.Contains(poppedNode = stack.Pop())) ;
+                return poppedNode;
+
+            }
+
+            return null;
+        }
+
+        //public static string serialize(Node root)
+        //{
+        //    var queue = new Queue<Node>();
+        //    int? firstNullIndexAtEnd = null;
+        //    queue.Enqueue(root);
+        //    var str = string.Empty;
+        //    while(queue.Any())
+        //    {
+        //        var node = queue.Dequeue();
+        //        if (str != string.Empty)
+        //            str += ", ";
+        //        if (node == null)
+        //            str += "null";
+        //        else
+        //        {
+        //            str += node.Value;
+        //            queue.Enqueue(node.left);
+        //            queue.Enqueue(node.right);
+        //        }
+        //    }
+
+        //    return str;
+        //}
+
+        public static string serialize(Node root)
+        {
+            var queue = new Queue<Node>();
+            int? firstNullIndexAtEnd = null;
+            queue.Enqueue(root);
+            var nodes = new List<Node>();
+            while (queue.Any())
+            {
+                var node = queue.Dequeue();
+                nodes.Add(node);
+                if (node == null && !firstNullIndexAtEnd.HasValue)
+                {
+                    firstNullIndexAtEnd = nodes.Count - 1;
+                }
+                else if(node != null)
+                    firstNullIndexAtEnd = null;
+
+                if (node != null)
+                {
+                    queue.Enqueue(node.left);
+                    queue.Enqueue(node.right);
+                }
+            }
+
+            return PrintStr();
+
+            string PrintStr()
+            {
+                var str = string.Empty;
+                var lastIndex = (firstNullIndexAtEnd.HasValue) ? firstNullIndexAtEnd.Value : nodes.Count;
+                for(var i = 0; i< lastIndex; i++)
+                {
+                    if (i > 0)
+                        str += ",";
+                    if (nodes[i] == null)
+                        str += "null";
+                    else
+                        str += nodes[i].Value;
+                }
+
+                return "[" + str + "]";
+            }
+
+            
         }
 
         static void Main(string[] args)
@@ -647,25 +1044,35 @@ namespace Trees
             //root.right.right = new Node(8);
 
             //example 2
-            root = new Node(10);
-            root.left = new Node(11);
-            root.left.left = new Node(7);
-            root.left.left.right = new Node(6);
-            root.left.left.right.left = new Node(18);
-            root.left.left.right.right = new Node(19);
-            root.left.left.right.left.right = new Node(25);
-            root.left.right = new Node(12);
-            root.left.right.left = new Node(13);
-            root.left.right.right = new Node(14);
-            root.right = new Node(9);
-            root.right.left = new Node(15);
-            root.right.right = new Node(8);
-            var isSumPresent = HasPathSum(root, 47);
+            //root = new Node(10);
+            //root.left = new Node(11);
+            //root.left.left = new Node(7);
+            //root.left.left.right = new Node(6);
+            //root.left.left.right.left = new Node(18);
+            //root.left.left.right.right = new Node(19);
+            //root.left.left.right.left.right = new Node(25);
+            //root.left.right = new Node(12);
+            //root.left.right.left = new Node(13);
+            //root.left.right.right = new Node(14);
+            //root.right = new Node(9);
+            //root.right.left = new Node(15);
+            //root.right.right = new Node(8);
+            //var isSumPresent = HasPathSum(root, 47);
 
             //root = new Node(1);
             //root.left = new Node(2);
             //var isSumPresent = HasPathSum(root, 1);
-            Console.ReadLine();
+
+            //root = ConvertArrayToTree(new int?[]
+            //{
+            //    7, 82, 82, -79, 98, 98, -79, -79, null, -28, -24, -28, -24, null, -79, null, 97, 65, -4, null, 3, -4,
+            //    65, 3, null, 97
+            //});
+
+            //var numberofUniValTrees = CountUnivalSubtrees(root);
+            //var d = FindMaximumDepthofBinaryTree(root);
+
+            //Console.ReadLine();
             //LevelOrderTraversal1();
             //PreOrder(root);
             //PreOrderWithoutRecursion();
@@ -804,7 +1211,79 @@ namespace Trees
             //root.right = new Node(3);
             //var isSymmetric = IsSymmetric(root);
 
-            //Console.ReadLine();
+            //Construct Tree for inorder and postorder
+            //var inorder = new int[] { 9, 3, 15, 20, 7 };
+            //var postorder = new[] { 9, 15, 7, 20, 3 };
+            //var inorder = new int[] {9, 3};
+            //var postorder = new int[] {9, 3};
+            //root = BuildTree(inorder, postorder);
+            //root = BuildTree4(inorder, postorder);
+
+            //Construct Tree for inorder and preorder
+            //var inorder = new int[] { 9, 3, 15, 20, 7 };
+            //var preorder = new[] {3, 9, 20, 15, 7 };
+            //root = BuildTree1(preorder, inorder);
+
+            //root = BuildTree3(inorder, preorder);
+
+            //root = new Node(3);
+            //root.left = new Node(4);
+            //root.right = new Node(5);
+
+            //root.left.left = new Node(1);
+            //root.left.right = new Node(2);
+            //root.left.left.left = new Node(8);
+
+            //root = new Node(3);
+            //root.left = new Node(8);
+            //root.right = new Node(9);
+
+            //root.left.left = new Node(4);
+            //root.left.left.left = new Node(1);
+            //root.left.left.right = new Node(3);
+
+            //root.right.right = new Node(4);
+            //root.right.right.left = new Node(1);
+            //root.right.right.right = new Node(2);
+
+            //var subtreeToCompareNode = new Node(4);
+            //subtreeToCompareNode.left = new Node(1);
+            //subtreeToCompareNode.right = new Node(2);
+            //var areEqual = IsSubTree(root, subtreeToCompareNode);
+
+            //var list = new List<int?>()
+            //{
+            //    3,
+            //    5,
+            //    1,
+            //    6,
+            //    2,
+            //    0,
+            //    8,
+            //    11,
+            //    15,
+            //    null,
+            //    null,
+            //    null,
+            //    null,
+            //    null,
+            //    null,
+            //    null,
+            //    null,
+            //    100,
+            //    35
+            //};
+            //root = ConvertArrayToTree(list.ToArray());
+            //var lcaNode = LowestCommonAncestor(root, root.right.left, root.right.right);
+
+            root = new Node(1);
+            root.left = new Node(2);
+            root.right = new Node(3);
+            root.right.left = new Node(4);
+            root.right.right = new Node(5);
+            var str = serialize(root);
+            var node = deserialize("[1,2]");
+            Console.ReadLine();
         }
     }
 }

@@ -26,33 +26,42 @@ namespace ConsoleApp1
 
             //var dictionary = new Dictionary<int, int>();
             //dictionary.Add(0, 1);
-            
+
 
             //var array = new int[4] {2, 7, 11, 15};
             //var result = new ConsoleApp1.Program().TwoSum(array, 9);
 
-            //var lst = new List<A>()
-            //{
-            //    new A() {Id = 1, PId = 1, Name = "a1"},
-            //    new A() {Id = 2, PId = 1, Name = "a2"},
-            //    new A() {Id = 3, PId = 1, Name = "a3"},
-            //    new A() {Id = 4, PId = 2, Name = "a4"},
-            //    new A() {Id = 5, PId = 2, Name = "a5"}
-            //};
+            var lst = new List<A>()
+            {
+                new A() {Id = 1, PId = 1, Name = "a1"},
+                new A() {Id = 2, PId = 1, Name = "a2"},
+                new A() {Id = 3, PId = 1, Name = "a3"},
+                new A() {Id = 4, PId = 2, Name = "a4"},
+                new A() {Id = 5, PId = 2, Name = "a5"}
+            };
 
-            //var grp = lst.GroupBy(l => l.PId);
+            var grp = lst.GroupBy(l => l.PId);
 
-            //foreach (var grpch in grp)
-            //{
-            //    var a = grpch.ToList();
-            //}
+            foreach (var grpch in grp)
+            {
+                var a = grpch.ToList();
+            }
 
-            var a = new List<int>();
-            var b = a.Select(a1 => a1);
+            //var a = new List<int>();
+            //var b = a.Select(a1 => a1);
 
             //var a = new Program().GetStudentInfo1((default(string), default(int)));
             //var b = new Program().GetStudentInfo2(null);
+            //A a = null;
+            //new Program().TestMethod(a);
+
+
             Console.ReadLine();
+        }
+
+        public void TestMethod(A a)
+        {
+            a = new A();
         }
 
         public (string name, int age) GetStudentInfo(string id)

@@ -128,7 +128,40 @@ namespace ArrayProblems
                 return "Printing " + str;
             return str;
         }
+
+        public static int[][] FlipAndInvertImage(int[][] A)
+        {
+            for (var i = 0; i < A.Length; i++)
+            {
+                A[i] = Process(A[i]);
+            }
+
+            int[] Process(int[] row)
+            {
+                for (int i = 0; i <= (row.Length -1)/2; i++)
+                {
+                    if (row[i] == row[row.Length - 1 - i])
+                    {
+                        if (row[i] == 1)
+                        {
+                            row[i] = 0;
+                            row[row.Length - 1 - i] = 0;
+                        }
+                        else
+                        {
+                            row[i] = 1;
+                            row[row.Length - 1 - i] = 1;
+                        }
+                    }
+                }
+
+                return row;
+            }
+
+            return A;
+        }
     }
+
     class Program
     {
         static void Main(string[] args)
@@ -139,6 +172,11 @@ namespace ArrayProblems
 
             //BinaryBits.PrintAllThreeary(3);
 
+            int[][] A = new int[3][];
+            A[0] = new int[3] { 1, 1, 0 };
+            A[1] = new int[3] { 1, 0, 1 };
+            A[2] = new int[3] { 0, 0, 0 };
+            A = BinaryBits.FlipAndInvertImage(A);
             Console.ReadLine();
         }
     }
