@@ -47,12 +47,37 @@ namespace Recursion
             //        break;
             //}
 
-            var root = new TreeNode(3);
-            root.left = new TreeNode(9);
-            root.right = new TreeNode(20);
-            root.right.left = new TreeNode(15);
-            root.right.left = new TreeNode(7);
+            //var root = new TreeNode(3);
+            //root.left = new TreeNode(9);
+            //root.right = new TreeNode(20);
+            //root.right.left = new TreeNode(15);
+            //root.right.left = new TreeNode(7);
 
+            //var pow = new Power().MyPow(0.00001, 2147483647);
+
+            //var pow = new Power().MyPow(2, 15);
+
+            //var l1 = new ListNode(1);
+            //l1.next = new ListNode(2);
+            //l1.next.next = new ListNode(4);
+
+            //var l2 = new ListNode(3);
+            //l2.next = new ListNode(7);
+            //l2.next.next = new ListNode(8);
+            //l2.next.next.next = new ListNode(9);
+
+            //var l1 = new ListNode(1);
+            //l1.next = new ListNode(2);
+            //l1.next.next = new ListNode(4);
+
+            //var l2 = new ListNode(1);
+            //l2.next = new ListNode(3);
+            //l2.next.next = new ListNode(4);
+            //l2.next.next.next = new ListNode(9);
+
+            //var node = new Merge().MergeTwoListsRecursion(l1, l2);
+
+            var val = new KGrammer().KthGrammar(30, 434991989);
         }
     }
 }
