@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScratchPad", "ScratchPad.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\ConsoleApp1\ConsoleApp1.csproj", "{5A04CF1E-7379-4E6C-AAFC-12F04AE4FDCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "..\ClassLibrary1\ClassLibrary1.csproj", "{F8D0608D-7DC3-4496-8286-D9DBE0253BC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5A04CF1E-7379-4E6C-AAFC-12F04AE4FDCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A04CF1E-7379-4E6C-AAFC-12F04AE4FDCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A04CF1E-7379-4E6C-AAFC-12F04AE4FDCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8D0608D-7DC3-4496-8286-D9DBE0253BC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8D0608D-7DC3-4496-8286-D9DBE0253BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8D0608D-7DC3-4496-8286-D9DBE0253BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8D0608D-7DC3-4496-8286-D9DBE0253BC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

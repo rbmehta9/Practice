@@ -15,6 +15,33 @@ namespace ScratchPad
         B = 2
     }
 
+    public class BaseClass
+    {
+        public int publicId { get; set; }
+        private int privateId { get; set; }
+        protected int protectedId { get; set; }
+        internal int internalId { get; set; }
+        protected internal int protectedinternalId { get; set; }
+    }
+
+    public class DerivedClass : BaseClass
+    {
+        public DerivedClass()
+        {
+            protectedId = 0;
+        }
+        public int Id { get; set; }
+    }
+
+    public class DerivedClassFromExternalAssembly : ClassLibrary1.BaseClass
+    {
+        public DerivedClassFromExternalAssembly()
+        {
+            protectedinternalId = 0;
+        }
+    }
+
+
     public class A
     {
         public int Id { get; set; }
@@ -408,15 +435,45 @@ namespace ScratchPad
             //var x = b1 && b2 || b3;
             //var y = b3 || b1 && b2;
 
-            var dc = new DerivedClassTest();
-            //var x = dc as DerivedClassTest;
-            var b1 = Conv(dc);
+            //var dc = new DerivedClassTest();
+            ////var x = dc as DerivedClassTest;
+            //var b1 = Conv(dc);
 
-            bool Conv(BaseClassTest bc)
-            {
-                var x1 = bc as DerivedClassTest1;
-                return x1 != null;
-            }
+            //bool Conv(BaseClassTest bc)
+            //{
+            //    var x1 = bc as DerivedClassTest1;
+            //    return x1 != null;
+            //}
+
+            //Another assembly (ClassLibrary1)
+            var baseClass = new ClassLibrary1.BaseClass();
+            //baseClass.internalId = 0; cannot access since this is in a different assembly
+            baseClass.publicId = 0;
+            //baseClass.protectedinternalId = 0; //protected internal can be accessed by any code within the same assembly or from within a  derived class in another assembly
+            //baseClass.protectedId   //cannot access. Can only be access from within the class
+
+            var derivedClass = new ClassLibrary1.DerivedClass();
+            derivedClass.Id = 0;
+            //derivedClass.internalId = 0; cannot access since this is in a different assembly
+            derivedClass.publicId = 0;
+            //derivedClass.protectedinternalId = 0;//protected internal can be accessed by any code within the same assembly or from within a  derived class in another assembly
+
+            //Same assembly
+            var baseClass1 = new ScratchPad.BaseClass();
+            baseClass1.internalId = 0; //can access since this is in the same assembly
+            baseClass1.publicId = 0;
+            baseClass1.protectedinternalId = 0;
+            //baseClass.protectedId   //cannot access
+
+            var derivedClass1 = new ScratchPad.DerivedClass();
+            derivedClass1.Id = 0;
+            derivedClass1.internalId = 0; //cann access since this is in the same assembly
+            derivedClass1.publicId = 0;
+            derivedClass1.protectedinternalId = 0;
+            //derivedClass.protectedId   //cannot access.Can only be access from within the base or derived class
+
+            var aaaa = new ScratchPad.DerivedClassFromExternalAssembly();
+            //aaaa.protectedinternalId = 0;//protected internal can be accessed by any code within the same assembly or from within a  derived class in another assembly
 
         }
 

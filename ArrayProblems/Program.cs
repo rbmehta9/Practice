@@ -209,9 +209,9 @@ namespace ArrayProblems
             var t = 0;
             while (t < A.Length)
             {
-                if(i> - 1 && j<A.Length)
+                if (i > -1 && j < A.Length)
                 {
-                    if(Math.Abs(A[i]) < A[j])
+                    if (Math.Abs(A[i]) < A[j])
                     {
                         result[t] = A[i] * A[i];
                         i--;
@@ -222,7 +222,7 @@ namespace ArrayProblems
                         j++;
                     }
                 }
-                else if(i == -1)
+                else if (i == -1)
                 {
                     result[t] = A[j] * A[j];
                     j++;
@@ -233,7 +233,7 @@ namespace ArrayProblems
                     i--;
                 }
                 t++;
-                
+
             }
 
             return result;
@@ -249,16 +249,16 @@ namespace ArrayProblems
             var buckets = new int[101];
 
             //array where index is the value if the input array heights and value of buckets is the frequency
-            foreach(var height in heights)
+            foreach (var height in heights)
             {
                 buckets[height]++;
             }
 
             var moves = 0;
             var i = 0;
-            for(var j = 0; j < buckets.Length; j++)
+            for (var j = 0; j < buckets.Length; j++)
             {
-                while(buckets[j] > 0)
+                while (buckets[j] > 0)
                 {
                     if (j != heights[i])
                         moves++;
@@ -270,6 +270,82 @@ namespace ArrayProblems
             }
 
             return moves;
+        }
+
+        /// <summary>
+        /// https://leetcode.com/explore/learn/card/fun-with-arrays/523/conclusion/3230/
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        public static int FindMaxConsecutiveOnes(int[] nums)
+        {
+            var prevNumberofConsecutive1s = 0;
+            var currentNumberofConsecutive1s = 0;
+            var max = 0;
+            var firstZeroReached = false;
+            foreach (var num in nums)
+            {
+                if (num == 0)
+                {
+                    if (!firstZeroReached)
+                        firstZeroReached = true;
+                    else
+                        max = Math.Max(max, prevNumberofConsecutive1s + currentNumberofConsecutive1s + 1);
+                    prevNumberofConsecutive1s = currentNumberofConsecutive1s;
+                    currentNumberofConsecutive1s = 0;
+                }
+                else
+                {
+                    currentNumberofConsecutive1s++;
+                }
+            }
+
+            if (firstZeroReached)
+                max = Math.Max(max, prevNumberofConsecutive1s + currentNumberofConsecutive1s + 1);
+            else
+                max = nums.Length;
+
+            return max;
+        }
+
+        /// <summary>
+        /// https://leetcode.com/explore/learn/card/fun-with-arrays/523/conclusion/3231/
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        public static int ThirdMax(int[] nums)
+        {
+            var max = FindMax();
+            var bucket = new int[max + 1];
+            foreach (var num in nums)
+            {
+                bucket[num]++;
+            }
+
+            var counter = 3;
+            var lastmax = 0;
+            for (var i = max; i > -1; i--)
+            {
+                if (bucket[i] > 0)
+                {
+                    counter--;
+                    lastmax = i;
+                }
+
+                if (counter == 0)
+                    return i;
+            }
+
+            return max;
+
+            int FindMax()
+            {
+                var mx = 0;
+                foreach (var num in nums)
+                    mx = Math.Max(mx, num);
+
+                return mx;
+            }
         }
 
     }
@@ -418,8 +494,17 @@ namespace ArrayProblems
 
             //var heights = new int[] { 1, 1, 4, 2, 1, 3 };
             //var heights = new int[] { 5, 1, 2, 3, 4 };
-            var heights = new int[] { 1, 2, 3, 4, 5 };
-            var result = ReplaceGreatestRightElement.HeightChecker(heights);
+            //var heights = new int[] { 1, 2, 3, 4, 5 };
+            //var result = ReplaceGreatestRightElement.HeightChecker(heights);
+
+            //var nums = new int[] {0, 1, 0, 1, 1, 1, 0, 0 };
+            //var nums = new int[] { 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1 };
+            //var nums = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            //var nums = new int[] { 0, 0, 0, 0, 0, 0 };
+            //var a = ReplaceGreatestRightElement.FindMaxConsecutiveOnes(nums);
+
+            var nums = new int[] { 2,2,3,1 };
+            var a = ReplaceGreatestRightElement.ThirdMax(nums);
             Console.ReadLine();
         }
     }
