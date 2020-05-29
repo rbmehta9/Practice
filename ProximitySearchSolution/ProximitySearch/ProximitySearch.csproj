@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ArgumentParser.cs" />
     <Compile Include="FileHelper.cs" />
+    <Compile Include="FileParser.cs" />
     <Compile Include="ProximitySearchService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
