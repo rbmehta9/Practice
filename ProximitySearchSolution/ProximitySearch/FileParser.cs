@@ -7,46 +7,17 @@ using System.Threading.Tasks;
 
 namespace ProximitySearch
 {
-    public static class FileHelper
+    public interface IFileParser
     {
-        public static IEnumerable<string> GetAllWords(string fileName)
-        {
-
-            var text = File.ReadAllLines("testfile.txt").ToList();
-            return text.GetWords();
-
-        }
-
+        IEnumerable<string> GetAllWords(string fileName);
     }
 
-    public static class TextCleanUpHelper
+    public class FileParser : IFileParser
     {
-        public static IEnumerable<string> GetWords(this List<string> text)
+        public IEnumerable<string> GetAllWords(string fileName)
         {
-            var words = new List<string>();
-            foreach (var line in text)
-            {
-                var lineCleaned = line.IgnoreUnWantedCharecters();
-                var lineWords = lineCleaned.Split(' ').ToList();
-                lineWords.RemoveExtraSpacing();
-                words.AddRange(lineWords);
-            }
-
-            return words;
+            var text = File.ReadAllLines("testfile.txt").ToList();
+            return text.GetWords();
         }
-
-        public static string IgnoreUnWantedCharecters(this string s)
-        {
-            const char NEW_LINE = '\n';
-            const char CARRIAGE_RETURN = '\r';
-            const char TAB = '\t';
-            return String.Join("", s.Where(c => c != NEW_LINE && c != CARRIAGE_RETURN && c != TAB));
-        }
-
-        public static void RemoveExtraSpacing(this List<string> s)
-        {
-            s.RemoveAll(w => string.IsNullOrEmpty(w));
-        }
-
     }
 }
