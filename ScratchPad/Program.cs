@@ -22,6 +22,9 @@ namespace ScratchPad
         protected int protectedId { get; set; }
         internal int internalId { get; set; }
         protected internal int protectedinternalId { get; set; }
+        public Func<int, string> f { get; set; }
+        public Action<int> action { get; set; }
+
     }
 
     public class DerivedClass : BaseClass
@@ -463,6 +466,8 @@ namespace ScratchPad
             baseClass1.internalId = 0; //can access since this is in the same assembly
             baseClass1.publicId = 0;
             baseClass1.protectedinternalId = 0;
+            baseClass1.f = (a23) => { return a23.ToString(); };
+            baseClass1.action = (a24) => { };
             //baseClass.protectedId   //cannot access
 
             var derivedClass1 = new ScratchPad.DerivedClass();

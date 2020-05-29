@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C2D2D809-68CC-4644-921A-46C2AEACFA96}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Recursion</RootNamespace>
-    <AssemblyName>Recursion</AssemblyName>
+    <ProjectGuid>{6C036A76-A695-4869-9288-9A867854E632}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProximitySearch</RootNamespace>
+    <AssemblyName>ProximitySearch</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,23 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinarySearchRecursion.cs" />
-    <Compile Include="ClimbStair.cs" />
-    <Compile Include="KGrammer.cs" />
-    <Compile Include="LinkedList.cs" />
-    <Compile Include="ListNode.cs" />
-    <Compile Include="Merge.cs" />
-    <Compile Include="PascalsTriangle.cs" />
-    <Compile Include="Power.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ArgumentParser.cs" />
+    <Compile Include="FileParser.cs" />
+    <Compile Include="ProximitySearchService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReverseLinkedList.cs" />
-    <Compile Include="SwapNodes.cs" />
-    <Compile Include="SwapNodesRecursion.cs" />
-    <Compile Include="TreeNode.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

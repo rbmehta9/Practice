@@ -315,37 +315,233 @@ namespace ArrayProblems
         /// <returns></returns>
         public static int ThirdMax(int[] nums)
         {
-            var max = FindMax();
-            var bucket = new int[max + 1];
-            foreach (var num in nums)
+            var distinctCounter = 0;
+            for (var i = 0; i < nums.Length - 1; i++)
             {
-                bucket[num]++;
-            }
-
-            var counter = 3;
-            var lastmax = 0;
-            for (var i = max; i > -1; i--)
-            {
-                if (bucket[i] > 0)
+                for (var j = 0; j < nums.Length - 1 - i; j++)
                 {
-                    counter--;
-                    lastmax = i;
+                    if (nums[j] > nums[j + 1])
+                    {
+                        var t = nums[j];
+                        nums[j] = nums[j + 1];
+                        nums[j + 1] = t;
+                    }
                 }
 
-                if (counter == 0)
-                    return i;
+                if (i == 0 || nums[nums.Length - 1 - i] != nums[nums.Length - i])
+                    distinctCounter++;
+
+                if (distinctCounter == 3)
+                    return nums[nums.Length - 1 - i];
             }
 
-            return max;
+            if (nums[0] != nums[1])
+                distinctCounter++;
 
-            int FindMax()
+            if (distinctCounter == 3)
+                return nums[0];
+
+            return nums[nums.Length - 1];
+        }
+        //public static int ThirdMax(int[] nums)
+        //{
+        //    var max = FindMax();
+        //    var bucket = new int[max + 1];
+        //    foreach (var num in nums)
+        //    {
+        //        bucket[num]++;
+        //    }
+
+        //    var counter = 3;
+        //    var lastmax = 0;
+        //    for (var i = max; i > -1; i--)
+        //    {
+        //        if (bucket[i] > 0)
+        //        {
+        //            counter--;
+        //            lastmax = i;
+        //        }
+
+        //        if (counter == 0)
+        //            return i;
+        //    }
+
+        //    return max;
+
+        //    int FindMax()
+        //    {
+        //        var mx = 0;
+        //        foreach (var num in nums)
+        //            mx = Math.Max(mx, num);
+
+        //        return mx;
+        //    }
+        //}
+
+        /// <summary>
+        /// https://leetcode.com/problems/kth-largest-element-in-an-array/
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        public static int FindKthLargest(int[] nums, int k)
+        {
+            //Kth largest element is n - k smallest
+            //eg. [3,2,1,5,6,4]. 2nd largest element is 4th smallest element (index starting zero)
+            return FindKthSmallest(0, nums.Length - 1, nums.Length - k, nums);
+        }
+
+        private static int FindKthSmallest(int left, int right, int k, int[] nums)
+        {
+            var random = new Random();
+            var pivotIndex = left + random.Next(right - left);
+            pivotIndex = Partition(left, right, pivotIndex, nums);
+            if (pivotIndex == k)
+                return nums[k];
+            else if (k > pivotIndex)
+                return FindKthSmallest(pivotIndex + 1, right, k, nums);
+
+            return FindKthSmallest(left, pivotIndex - 1, k, nums);
+
+        }
+
+        private static void Swap(int i, int j, int[] nums)
+        {
+            if (i == j)
+                return;
+            var t = nums[i];
+            nums[i] = nums[j];
+            nums[j] = t;
+        }
+
+        private static int Partition(int left, int right, int pivotIndex, int[] nums)
+        {
+            //counter for elements lest than pivot
+            var smallerElementsCounter = left;
+            var pivot = nums[pivotIndex];
+            Swap(pivotIndex, right, nums);
+
+            //At the end of this loop the value of the smallerElementsCounter will be equal to the number of elements less than pivot
+            //The swap above Swap(pivotIndex, right, nums) will result as [4,2,1,5,6,3]
+            //pivot = 3, pivotindex = 0. we can notice 2 elements (1 and 2) smaller than 3
+            //when a smaller element less than pivot is found smallerElementsCounter is incremented
+            //As mentioned in my comments we can notice 2 elements (1 and 2) smaller than 3(pivot). Means 1 and 2 will have positions (0 and 1 irrespective of order)
+            //[4,2,1,5,6,3] 
+            //i =0 , 4 is larger hence smallerElementsCounter remains zero
+            //i = 1, 2 is smaller hence 2 must take the first spot i.e. 0 as per smallerElementsCounter. Hence we swap with positions 0 and 1. smallerElementsCounter becomes 1
+            //i = 2, 1 is smaller hence 1 must take second spot i.e. position 1 (first spot i.e. position 0 taken by 2.Hence we swap positions 1 and 2. smallerElementsCounter becomes 2
+            //i = 3, 4,5 are all larger hence smallerElementsCounter remains same. smallerElementsCounter will now reflect actual poistion of pivot element 3
+            //The for loop below
+            for (var i = left; i <= right; i++)
             {
-                var mx = 0;
-                foreach (var num in nums)
-                    mx = Math.Max(mx, num);
-
-                return mx;
+                if (nums[i] < pivot)
+                {
+                    Swap(smallerElementsCounter, i, nums);
+                    smallerElementsCounter++;
+                }
             }
+
+            //Pivot element is still at the end. smallerElementsCounter now reflects actual position of pivot element 3. Hence we swap
+            //with rightmost element
+            Swap(smallerElementsCounter, right, nums);
+
+            return smallerElementsCounter;
+        }
+
+        /// <summary>
+        /// https://leetcode.com/explore/learn/card/fun-with-arrays/523/conclusion/3270/
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        public static IList<int> FindDisappearedNumbers(int[] nums)
+        {
+            var missingArray = new List<int>();
+            for (var i = 0; i < nums.Length; i++)
+            {
+                var value = Math.Abs(nums[i]);
+                nums[value - 1] = -1 * Math.Abs(nums[value - 1]);
+            }
+
+            for (var i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] > 0)
+                    missingArray.Add(i + 1);
+            }
+
+            return missingArray;
+
+        }
+
+        public static int FindProximitySearch(List<string> text, string keyword1, string keyword2, int range)
+        {
+            var start = 0;
+            var numberofMatches = 0;
+            while (start < text.Count - 1)
+            {
+                if (text[start] != keyword1 && text[start] != keyword2)
+                {
+                    start++;
+                    continue;
+                }
+
+                var secondWord = (text[start] == keyword1) ? keyword2 : keyword1;
+                var secondWordCounter = start + 1;
+                var secondWordLimit = start + range;
+                if (secondWordLimit > text.Count - 1)
+                    secondWordLimit = text.Count - 1;
+                while (secondWordCounter < secondWordLimit)
+                {
+                    if (text[secondWordCounter] == secondWord)
+                        numberofMatches++;
+
+                    secondWordCounter++;
+                }
+
+                start++;
+
+            }
+
+            return numberofMatches;
+        }
+
+        public static int FindProximitySearch1(List<string> text, string keyword1, string keyword2, int range)
+        {
+            var keyWord1SortedIndexes = text.Select((item, index) => new { Word = item, Index = index })
+                                        .Where(obj => obj.Word == keyword1).Select(i => i.Index);
+
+            var keyWord2SortedIndexes = text.Select((item, index) => new { Word = item, Index = index })
+                                        .Where(obj => obj.Word == keyword2).Select(i => i.Index);
+
+            
+            if (keyWord1SortedIndexes.Count() < keyWord2SortedIndexes.Count())
+            {
+                return Calculate(keyWord1SortedIndexes, keyWord2SortedIndexes);
+            }
+            else
+            {
+                return Calculate(keyWord2SortedIndexes, keyWord1SortedIndexes);
+            }
+
+            int Calculate(IEnumerable<int> smallerList, IEnumerable<int> largerList)
+            {
+                var numofMatches = 0;
+                foreach (var index in smallerList)
+                {
+                    var lowerLimit = index - range + 1;
+                    if (lowerLimit < 0)
+                        lowerLimit = 0;
+
+                    var upperLimit = index + range - 1;
+                    if (upperLimit > text.Count - 1)
+                        upperLimit = text.Count - 1;
+
+                    numofMatches += largerList.Count(ind => lowerLimit <= ind && ind <= upperLimit);
+                }
+
+                return numofMatches;
+            }
+
+
         }
 
     }
@@ -503,8 +699,40 @@ namespace ArrayProblems
             //var nums = new int[] { 0, 0, 0, 0, 0, 0 };
             //var a = ReplaceGreatestRightElement.FindMaxConsecutiveOnes(nums);
 
-            var nums = new int[] { 2,2,3,1 };
-            var a = ReplaceGreatestRightElement.ThirdMax(nums);
+            //var nums = new int[] { 7 , 8, 8, 8};
+            //var a = ReplaceGreatestRightElement.ThirdMax(nums);
+
+            //var nums = new int[] { 3,2,1,5,6,4 };
+            //var a = ReplaceGreatestRightElement.FindKthLargest(nums, 2);
+
+            //var nums = new int[] { 4, 3, 2, 7, 8, 2, 3, 1 };
+            //var a = ReplaceGreatestRightElement.FindDisappearedNumbers(nums);
+
+            var text = new List<string>() { "the",
+                                            "man",
+                                            "the",
+                                            "plan",
+                                            "the",
+                                            "canal",
+                                            "panama",
+                                            //"panama",
+                                            //"canal",
+                                            //"the",
+                                            //"plan",
+                                            //"the",
+                                            //"man",
+                                            //"the",
+                                            //"the",
+                                            //"man",
+                                            //"the",
+                                            //"plan",
+                                            //"the",
+                                            //"canal",
+                                            //"panama"
+                                            };
+
+            var numberofMatches = ReplaceGreatestRightElement.FindProximitySearch1(text, "the", "canal", 3);
+
             Console.ReadLine();
         }
     }

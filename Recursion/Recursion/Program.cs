@@ -77,7 +77,38 @@ namespace Recursion
 
             //var node = new Merge().MergeTwoListsRecursion(l1, l2);
 
-            var val = new KGrammer().KthGrammar(30, 434991989);
+            //var val = new KGrammer().KthGrammar(30, 434991989);
+            //var headA = new ListNode(4);
+            //headA.next = new ListNode(1);
+            //headA.next.next = new ListNode(8);
+            //headA.next.next.next = new ListNode(4);
+            //headA.next.next.next.next = new ListNode(5);
+
+            //var headB = new ListNode(5);
+            //headB.next = new ListNode(0);
+            //headB.next.next = new ListNode(1);
+            //headB.next.next.next = headA.next.next;
+            //headB.next.next.next.next = headA.next.next.next;
+            //headB.next.next.next.next.next = headA.next.next.next.next;
+
+            //non intersecting
+            //var headA = new ListNode(2);
+            //headA.next = new ListNode(6);
+            //headA.next.next = new ListNode(4);
+
+            //var headB = new ListNode(1);
+            //headB.next = new ListNode(5);
+
+            //var node = new LinkedList().GetIntersectionNode1(headA, headB);
+
+            var head = new ListNode(4);
+            head.next = new ListNode(1);
+            head.next.next = new ListNode(8);
+            head.next.next.next = new ListNode(4);
+            head.next.next.next.next = new ListNode(5);
+            head.next.next.next.next.next = new ListNode(9);
+            head.next.next.next.next.next.next = new ListNode(10);
+            var node = new LinkedList().RemoveNthFromEnd(head, 3);
         }
     }
 }
