@@ -34,79 +34,66 @@ namespace ProximitySearch
     {
         public int FindNumberofMatches(ProximityCalculatorRequest request)
         {
-            var text = request.TextWords;
-            var keyWords = request.KeyWords;
-            var range = request.Range;
+            if(request.Range < request.KeyWords.Count)
+                throw new ArgumentException($"The range must be atleast {request.KeyWords.Count()}");
 
-            if(range < keyWords.Count)
-                throw new ArgumentException($"The range must be atleast {keyWords.Count()}");
-
-            //O(number of words)
-            var keyWordStackPositions = GetKeyWordPositions();
-            if (keyWordStackPositions.Count() < keyWords.Count())
+            var keyWordStackPositions = GetKeyWordPositions(request.TextWords, request.KeyWords);
+            if (keyWordStackPositions.Count() < request.KeyWords.Count())
                 return 0;
             var stackWithLowestPosition = default(Stack<int>);
             var numofMatches = 0;
-            //O(smallerlistsize * range)
             do
             {
-                //O(number of keywords)
-                stackWithLowestPosition = FindStackWithLowestPosition(keyWordStackPositions);
+                stackWithLowestPosition = FindStackWithLowestPosition(request.TextWords, keyWordStackPositions);
                 var prod = 1;
                 int minIndex = stackWithLowestPosition.Peek();
-                //O(number of keywords)
-                var stacksWithHigherIndex = keyWordStackPositions.Where(k => k != stackWithLowestPosition).ToList();
-                //O((number of keywords - 1)*range)
-                stacksWithHigherIndex.ForEach(s =>
-                {
-                    //O(range)
-                    prod *= s.Count(pos => pos <= minIndex + range - 1);
-                });
+                var stacksWithHigherIndex = keyWordStackPositions.Where(k => k != stackWithLowestPosition);
+                foreach(var stack in stacksWithHigherIndex)
+                    prod *= stack.Count(pos => pos <= minIndex + request.Range - 1);
+
                 numofMatches += prod;
-                stackWithLowestPosition.Pop();//O(1)
+                stackWithLowestPosition.Pop();
 
             }
             while (stackWithLowestPosition.Any());
 
             return numofMatches;
 
-            //O(number of keywords)
-            Stack<int> FindStackWithLowestPosition(List<Stack<int>> keyWordPositions)
+        }
+
+        private List<Stack<int>> GetKeyWordPositions(List<string> textWords,  List<string> keyWords)
+        {
+            var keyWordsCaseInsensitive = keyWords.Select(k => k.ToLower().Trim());
+            var dictionaryByKeyWord = new Dictionary<string, Stack<int>>();
+            for (var i = textWords.Count - 1; i >= 0; i--)
             {
-                var minIndex = text.Count;
-                var stackWithLowermostPosition = default(Stack<int>);
-                foreach (var stack in keyWordPositions)
-                {
-                    var peek = stack.Peek();
-                    if (peek < minIndex)
-                    {
-                        minIndex = peek;
-                        stackWithLowermostPosition = stack;
-                    }
+                var word = textWords[i].ToLower().Trim();
+                if (!keyWordsCaseInsensitive.Contains(word))
+                    continue;
+                if (!dictionaryByKeyWord.ContainsKey(word))
+                    dictionaryByKeyWord.Add(word, new Stack<int>());
 
-                }
-
-                return stackWithLowermostPosition;
-
+                dictionaryByKeyWord[word].Push(i);
             }
 
-            List<Stack<int>> GetKeyWordPositions()
-            {
-                var keyWordsCaseInsensitive = keyWords.Select(k => k.ToLower().Trim());
-                var dictionaryByKeyWord = new Dictionary<string, Stack<int>>();
-                for (var i = text.Count - 1; i >= 0; i--)
-                {
-                    var word = text[i].ToLower().Trim();
-                    if (!keyWordsCaseInsensitive.Contains(word))
-                        continue;
-                    if (!dictionaryByKeyWord.ContainsKey(word))
-                        dictionaryByKeyWord.Add(word, new Stack<int>());
+            return dictionaryByKeyWord.Values.ToList();
+        }
 
-                    dictionaryByKeyWord[word].Push(i);
+        private Stack<int> FindStackWithLowestPosition(List<string> textWords, List<Stack<int>> keyWordPositions)
+        {
+            var minIndex = textWords.Count;
+            var stackWithLowermostPosition = default(Stack<int>);
+            foreach (var stack in keyWordPositions)
+            {
+                var peek = stack.Peek();
+                if (peek < minIndex)
+                {
+                    minIndex = peek;
+                    stackWithLowermostPosition = stack;
                 }
 
-                return dictionaryByKeyWord.Values.ToList();
             }
+            return stackWithLowermostPosition;
         }
     }
 }
