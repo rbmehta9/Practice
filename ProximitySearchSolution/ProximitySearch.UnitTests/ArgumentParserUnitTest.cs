@@ -26,26 +26,6 @@ namespace ProximitySearch.UnitTests
         }
 
         [TestMethod]
-        public void When_InputArgument_FileName_Does_Not_Have_An_Extension_Throws_Exception()
-        {
-            var args = new string[4] { "kw1", "kw2", "2", "abc" };
-            var exception = Assert.ThrowsException<ArgumentException>(() => new ArgumentParser().ParseArguments(args));
-            const string FILE_EXTENSION = "txt";
-            Assert.AreEqual($"File must have an extension {FILE_EXTENSION}", exception.Message);
-
-        }
-
-        [TestMethod]
-        public void When_InputArgument_FileName_Extension_Not_Valid_Throws_Exception()
-        {
-            var args = new string[4] { "kw1", "kw2", "2", "abc.tx" };
-            var exception = Assert.ThrowsException<ArgumentException>(() => new ArgumentParser().ParseArguments(args));
-            const string FILE_EXTENSION = "txt";
-            Assert.AreEqual($"File extension must be {FILE_EXTENSION}", exception.Message);
-
-        }
-
-        [TestMethod]
         public void When_InputArgument_Valid_Returns_ProximitySearchRequest()
         {
             var args = new string[4] { "kw1", "kw2", "2", "abc.Txt" };

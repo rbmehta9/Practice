@@ -28,14 +28,14 @@ namespace ProximitySearch
             if (!int.TryParse(args[2], out range))
                 throw new ArgumentException($"Range argument must me an integer");
 
-            var periodIndex = args[3].IndexOf(".");
-            if(periodIndex == -1)
-                throw new ArgumentException($"File must have an extension {FILE_EXTENSION}");
+            //var periodIndex = args[3].IndexOf(".");
+            //if(periodIndex == -1)
+            //    throw new ArgumentException($"File must have an extension {FILE_EXTENSION}");
 
-            if (!isValidFileExtension())
-            {
-                throw new ArgumentException($"File extension must be {FILE_EXTENSION}");
-            }
+            //if (!isValidFileExtension())
+            //{
+            //    throw new ArgumentException($"File extension must be {FILE_EXTENSION}");
+            //}
 
             return new ProximitySearchRequest()
             {
@@ -44,13 +44,13 @@ namespace ProximitySearch
                 Range = range
             };
 
-            bool isValidFileExtension()
-            {
-                var extension = args[3].Substring(periodIndex + 1);
-                var isLengthValid = extension.Length == FILE_EXTENSION.Length;
-                var isExtensionValid = extension.Equals(FILE_EXTENSION, StringComparison.InvariantCultureIgnoreCase);
-                return isLengthValid && isExtensionValid;
-            }
+            //bool isValidFileExtension()
+            //{
+            //    var extension = args[3].Substring(periodIndex + 1);
+            //    var isLengthValid = extension.Length == FILE_EXTENSION.Length;
+            //    var isExtensionValid = extension.Equals(FILE_EXTENSION, StringComparison.InvariantCultureIgnoreCase);
+            //    return isLengthValid && isExtensionValid;
+            //}
         }
 
 

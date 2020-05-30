@@ -2,9 +2,10 @@ Assumptions:
 1.The search will ignore case
 2.The search will ignore extra spacing
 3.Filename must have an extension txt
-4.Filename must reside in the same folder as executable (I have it in bin\Debug folder)
-5.special charecters next to a word will be a different word eg. bells is different from "bells,"
-6.keywords cannot be repeated in the input parameters
+4.special charecters next to a word will be a different word eg. bells is different from "bells,"
+5.keywords cannot be repeated in the input parameters
+
+Steps:
 
 
 Explanation:
