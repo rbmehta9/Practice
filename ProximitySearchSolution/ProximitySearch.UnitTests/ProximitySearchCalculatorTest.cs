@@ -136,6 +136,27 @@ namespace ProximitySearch.UnitTests
             Assert.AreEqual(14, new ProximitySearchCalculator().FindNumberofMatches(request));
         }
 
+        [TestMethod]
+        public void If_Valid_Request_Returns_Correct_Response5()
+        {
+            var request = new ProximityCalculatorRequest
+            {
+                KeyWords = new List<string>() { "abc", "tst" },
+                TextWords = new List<string>() {
+                                                "the",
+                                                "man",
+                                                "the",
+                                                "plan",
+                                                "the",
+                                                "canal",
+                                                "panama",
+                                                },
+                Range = 3
+            };
+
+            Assert.AreEqual(0, new ProximitySearchCalculator().FindNumberofMatches(request));
+        }
+
 
 
     }

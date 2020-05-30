@@ -16,7 +16,7 @@ namespace ProximitySearch
     {
         public IEnumerable<string> GetAllWords(string fileName)
         {
-            var text = File.ReadAllLines("testfile.txt").ToList();
+            var text = File.ReadAllLines(fileName).ToList();
             return text.GetWords();
         }
     }

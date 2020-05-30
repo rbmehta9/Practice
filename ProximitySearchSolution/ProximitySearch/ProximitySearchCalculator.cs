@@ -92,11 +92,12 @@ namespace ProximitySearch
 
             List<Stack<int>> GetKeyWordPositions()
             {
+                var keyWordsCaseInsensitive = keyWords.Select(k => k.ToLower().Trim());
                 var dictionaryByKeyWord = new Dictionary<string, Stack<int>>();
                 for (var i = text.Count - 1; i >= 0; i--)
                 {
-                    var word = text[i];
-                    if (!keyWords.Contains(word))
+                    var word = text[i].ToLower().Trim();
+                    if (!keyWordsCaseInsensitive.Contains(word))
                         continue;
                     if (!dictionaryByKeyWord.ContainsKey(word))
                         dictionaryByKeyWord.Add(word, new Stack<int>());

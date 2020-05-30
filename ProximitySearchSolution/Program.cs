@@ -16,6 +16,7 @@ namespace ProximitySearchConsole
                 .AddScoped<IProximitySearchService, ProximitySearchService>()
                 .AddScoped<IArgumentParser, ArgumentParser>()
                 .AddScoped<IProximitySearchCalculator, ProximitySearchCalculator>()
+                .AddScoped<IFileParser, FileParser>()
                 .BuildServiceProvider();
 
             var proximitySearchService = serviceProvider.GetService<IProximitySearchService>();
