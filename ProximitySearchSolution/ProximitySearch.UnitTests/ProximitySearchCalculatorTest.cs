@@ -171,6 +171,52 @@ namespace ProximitySearch.UnitTests
             Assert.AreEqual(0, new ProximitySearchCalculator().FindNumberofMatches(request));
         }
 
+        [TestMethod]
+        public void If_Valid_Request_Returns_Correct_Response6()
+        {
+            var request = new ProximityCalculatorRequest
+            {
+                KeyWords = new List<string>() { "the", "great" },
+                TextWords = new List<string>() {"hello",
+                                                "the",
+                                                "great",
+                                                "once"  ,
+                                                "the"   ,
+                                                "great" ,
+                                                "abc",
+                                                "tttttt",
+                                                "fffff",
+                                                "ggggg",
+                                                "great" ,
+                                                "tyson" ,
+                                                "tyson" ,
+                                                "the"   ,
+                                                "great" ,
+                                                "great" ,
+                                                "the"   ,
+                                                "aaa",
+                                                "vbgjj" ,
+                                                "the"   ,
+                                                "dasdas",
+                                                "asdasd",
+                                                "asdas",
+                                                "asdasdsa",
+                                                "as9878978",
+                                                "asdsad",
+                                                "the"   ,
+                                                "kajshdkasd",
+                                                "dksadaj"   ,
+                                                "great" ,
+                                                "jsdkjsak",
+                                                "asdhaskj",
+                                                "ashkdjashd",
+                                                "the"
+                                                },
+                Range = 11
+            };
+
+            Assert.AreEqual(20, new ProximitySearchCalculator().FindNumberofMatches(request));
+        }
 
 
     }

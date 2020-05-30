@@ -1,28 +1,26 @@
 Assumptions:
 1.The search will ignore case
-2.The search will ignore extra spacing
-3.Filename must have an extension txt
-4.special charecters next to a word will be a different word eg. bells is different from "bells,"
-5.keywords cannot be repeated in the input parameters
-
-Steps:
+2.Extra spacing,new line , tabs, carriage return will be stripped
+3.special characters next to a word will be a different word eg. bells is different from "bells,"
+4.keywords cannot be repeated in the input parameters
 
 
 Explanation:
 Although the problem asks for 2 keyword search, the core service (ProximitySearchService) implemented is generalized 
 for any number of keywords (though the argument parser class in the console only assumes 2 keywords). 
 
+The crux of the code resides in ProximitySearchCalculator.cs
+
 
 Language: C#
 Algorithm:
 1.Store all the words in the inputfile in a List<string> 
-2.Store Position of each keyword in a separate collection. Hence for K keywords there will be K collections.
-  Hence 2 keywords 2 collections
-  The collection should be sorted. In my case I used a stack.While creating stacks, the positions were
-  already sorted since we looped though all the words in the file in increasing order
-3. Have a counter for numberofMatches = 0  
-4. Find the stack having the least position min by using stack.peek() for each. Let smin be stack with least position
-5. Find Count of the positions in each stack(excluding smin) which are less than or equal to (range - 1) and get their product.The product
+2.Store Positions (index) of each keyword in a separate stack in sorted order. Hence for K keywords there will be K stacks.
+  Hence 2 keywords 2 stacks
+  While creating stacks, the positions were already sorted since we looped though all the words in the file in increasing order
+3. Initialize counter for numberofMatches = 0  
+4. Find the stack having the least position by using stack.peek() for each. Let smin be stack with least position
+5. Find Count of the elements in each of the remaining stacks(excluding smin) where the elements are less than or equal to (range - 1) and get their product.The product
    gives us the number of matches for each position in the min stack
    Increment counter by prod.
    For 2 keywords,the counter gets simply incremented by nonminimum stack count
@@ -31,7 +29,7 @@ Algorithm:
 
 Complexity:
 It will depend on 
-1.Number of words in text (n) 
+1.Total Number of words in text (n) 
 2.Range (r) 
 3.Number of keywords (k)
 4.Smallest frequency amongst all keywords i.e.initial smallest stack size of stack (n1<n2<n3<n4)
