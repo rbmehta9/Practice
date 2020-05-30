@@ -25,6 +25,20 @@ namespace ProximitySearch.UnitTests
         }
 
         [TestMethod]
+        public void If_Keywords_Repeated_Than_Throws_Exception()
+        {
+            var request = new ProximityCalculatorRequest
+            {
+                KeyWords = new List<string>() { "abc", "abc", "xyz" },
+                TextWords = new List<string>() { "abc", "test", "def", "lmn" },
+                Range = 4
+            };
+
+            var exception = Assert.ThrowsException<ArgumentException>(() => new ProximitySearchCalculator().FindNumberofMatches(request));
+            Assert.AreEqual("Keywords cannot be repeated", exception.Message);
+        }
+
+        [TestMethod]
         public void If_Valid_Request_Returns_Correct_Response1()
         {
             var request = new ProximityCalculatorRequest

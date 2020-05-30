@@ -21,6 +21,9 @@ namespace ProximitySearch
             if (request.Range < request.KeyWords.Count)
                 throw new ArgumentException($"The range must be atleast {request.KeyWords.Count()}");
 
+            if (request.KeyWords.GroupBy(k => k).Any(grp => grp.Count() > 1))
+                throw new ArgumentException("Keywords cannot be repeated");
+
             var keyWordStackPositions = GetKeyWordPositions(request.TextWords, request.KeyWords);
             if (keyWordStackPositions.Count() < request.KeyWords.Count())
                 return 0;

@@ -16,16 +16,22 @@ namespace ProximitySearch.UnitTests
         {
             var unCleanedWords = new List<string>()
             {
-                "Hello",
-                "aasdasd\r\n",
-                "",
-                "",
+                "Hello\tabc\txyz",
+                "aasdasd\tbng\t\r\n",
+                "abc\t\n",
+                "\t",
                 "?."
             };
 
             var words = unCleanedWords.GetWords();
-            Assert.AreEqual(3, words.Count());
-            Assert.AreEqual("aasdasd", words.ElementAt(1));
+            Assert.AreEqual(7, words.Count());
+            Assert.AreEqual("Hello", words.ElementAt(0));
+            Assert.AreEqual("abc", words.ElementAt(1));
+            Assert.AreEqual("xyz", words.ElementAt(2));
+            Assert.AreEqual("aasdasd", words.ElementAt(3));
+            Assert.AreEqual("bng", words.ElementAt(4));
+            Assert.AreEqual("abc", words.ElementAt(5));
+            Assert.AreEqual("?.", words.ElementAt(6));
         }
     }
 }
