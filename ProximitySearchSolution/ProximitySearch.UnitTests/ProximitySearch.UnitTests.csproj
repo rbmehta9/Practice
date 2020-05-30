@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ArgumentParserUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProximitySearchCalculatorTest.cs" />
     <Compile Include="TextCleanUpHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>

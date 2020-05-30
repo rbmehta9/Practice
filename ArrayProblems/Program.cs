@@ -544,6 +544,132 @@ namespace ArrayProblems
 
         }
 
+        public static int FindProximitySearch2(List<string> text, List<string> keyWords, int range)
+        {
+            var dictionaryByKeyWord = new Dictionary<string, Stack<int>>();
+            for(var i =  text.Count - 1; i>=0;i--)
+            {
+                var word = text[i];
+                if (!keyWords.Contains(word))
+                    continue;
+                if (!dictionaryByKeyWord.ContainsKey(word))
+                    dictionaryByKeyWord.Add(word, new Stack<int>());
+
+                dictionaryByKeyWord[word].Push(i);
+            }
+
+            //int minIndex = -1;
+            //string keyWithMinIndex = null;
+            //bool isAnyStackEmpty = false;
+            var minkeyValuePair = FindMinKeyValuePair();
+            var numofMatches = 0;
+            while(dictionaryByKeyWord[minkeyValuePair.Key].Any())
+            {
+                var prod = 1;
+                int minIndex = minkeyValuePair.Value.Peek();
+                var stacksWithHigherIndex = dictionaryByKeyWord.Where(kvp => kvp.Key != minkeyValuePair.Key).Select(v => v.Value).ToList();
+                stacksWithHigherIndex.ForEach(s => 
+                {
+                    prod *= s.Count(pos => pos <= minIndex + range - 1);
+                });
+                numofMatches += prod;
+                dictionaryByKeyWord[minkeyValuePair.Key].Pop();
+               
+            }
+
+            return numofMatches;
+
+            //O(number of keywords)
+            KeyValuePair<string,Stack<int>> FindMinKeyValuePair()
+            {
+                var minIndex = -1;
+                KeyValuePair<string, Stack<int>> minimumkeyValuePair = default(KeyValuePair<string, Stack<int>>);
+                foreach (var kvp in dictionaryByKeyWord)
+                {
+                    var peek = kvp.Value.Peek();
+                    if (peek < minIndex)
+                    {
+                        minIndex = peek;
+                        minimumkeyValuePair = kvp;
+                    }
+
+                }
+
+                return minimumkeyValuePair;
+
+            }
+        }
+
+        public static int FindProximitySearch3(List<string> text, List<string> keyWords, int range)
+        {
+            //O(number of words)
+            var keyWordStackPositions = GetKeyWordPositions();
+            if (keyWordStackPositions.Count() < keyWords.Count())
+                return 0;
+            var stackWithLowestPosition = default(Stack<int>);
+            var numofMatches = 0;
+            //O(smallerlistsize * range)
+            do
+            {
+                //O(number of keywords)
+                stackWithLowestPosition = FindStackWithLowestPosition(keyWordStackPositions);
+                var prod = 1;
+                int minIndex = stackWithLowestPosition.Peek();
+                //O(number of keywords)
+                var stacksWithHigherIndex = keyWordStackPositions.Where(k => k != stackWithLowestPosition).ToList();
+                //O((number of keywords - 1)*range)
+                stacksWithHigherIndex.ForEach(s =>
+                {
+                    //O(range)
+                    prod *= s.Count(pos => pos <= minIndex + range - 1);
+                });
+                numofMatches += prod;
+                stackWithLowestPosition.Pop();//O(1)
+
+            }
+            while (stackWithLowestPosition.Any());
+
+            return numofMatches;
+
+            //O(number of keywords)
+            Stack<int> FindStackWithLowestPosition(List<Stack<int>> keyWordPositions)
+            {
+                var minIndex = text.Count;
+                var stackWithLowermostPosition = default(Stack<int>);
+                foreach (var stack in keyWordPositions)
+                {
+                    var peek = stack.Peek();
+                    if (peek < minIndex)
+                    {
+                        minIndex = peek;
+                        stackWithLowermostPosition = stack;
+                    }
+
+                }
+
+                return stackWithLowermostPosition;
+
+            }
+
+            List<Stack<int>> GetKeyWordPositions()
+            {
+                var dictionaryByKeyWord = new Dictionary<string, Stack<int>>();
+                for (var i = text.Count - 1; i >= 0; i--)
+                {
+                    var word = text[i];
+                    if (!keyWords.Contains(word))
+                        continue;
+                    if (!dictionaryByKeyWord.ContainsKey(word))
+                        dictionaryByKeyWord.Add(word, new Stack<int>());
+
+                    dictionaryByKeyWord[word].Push(i);
+                }
+
+                return dictionaryByKeyWord.Values.ToList();
+            }
+        }
+
+
     }
 
     /// <summary>
@@ -715,23 +841,23 @@ namespace ArrayProblems
                                             "the",
                                             "canal",
                                             "panama",
-                                            //"panama",
-                                            //"canal",
-                                            //"the",
-                                            //"plan",
-                                            //"the",
-                                            //"man",
-                                            //"the",
-                                            //"the",
-                                            //"man",
-                                            //"the",
-                                            //"plan",
-                                            //"the",
-                                            //"canal",
-                                            //"panama"
+                                            "panama",
+                                            "canal",
+                                            "the",
+                                            "plan",
+                                            "the",
+                                            "man",
+                                            "the",
+                                            "the",
+                                            "man",
+                                            "the",
+                                            "plan",
+                                            "the",
+                                            "canal",
+                                            "panama"
                                             };
 
-            var numberofMatches = ReplaceGreatestRightElement.FindProximitySearch1(text, "the", "canal", 3);
+            var numberofMatches = ReplaceGreatestRightElement.FindProximitySearch3(text, new List<string>() {"hello", "abc" }, 6);
 
             Console.ReadLine();
         }

@@ -15,10 +15,16 @@ namespace ProximitySearchConsole
             var serviceProvider = new ServiceCollection()
                 .AddScoped<IProximitySearchService, ProximitySearchService>()
                 .AddScoped<IArgumentParser, ArgumentParser>()
+                .AddScoped<IProximitySearchCalculator, ProximitySearchCalculator>()
                 .BuildServiceProvider();
 
             var proximitySearchService = serviceProvider.GetService<IProximitySearchService>();
-            Console.WriteLine($"Number of Matches {proximitySearchService.FindNumberofMatches(args)}");
+            var response = proximitySearchService.FindNumberofMatches(args);
+
+            if (response.NumberofMatches.HasValue)
+                Console.WriteLine($"Number of Matches {response.NumberofMatches}");
+            else
+                Console.WriteLine($"ProximitySearchService errored out with the message {response.ErrorMessage}");
 
             
             
