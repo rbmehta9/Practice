@@ -37,7 +37,7 @@ For 2 keywords, complexity O(n1r) where n1 is the keyword with least occurence
 Generalizing for k keywords : O(n) + O(n1kr). If n1, k and r are very small then it becomes O(n) else as n1,k,r increase they will approach n and may exceed.
 
 
-I will demonstrate the eg used in the pdf but I have used different texts and higher keywords in my unit tests
+I will demonstrate the e.g. used in the pdf but I have used different texts and higher keywords in my unit tests
 
 Sample text:
 the man  the  plan  the canal   panama  panama  canal the  plan  the	 	man	 the	 the	 man	 the plan  the	  canal	  panama
