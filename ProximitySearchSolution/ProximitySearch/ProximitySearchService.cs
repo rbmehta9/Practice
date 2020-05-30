@@ -6,17 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProximitySearch
 {
-    public class ProximityCalculatorResponse
-    {
-        public int? NumberofMatches { get; set; }
-        public string ErrorMessage { get; set; }
-    }
-
-    public interface IProximitySearchService
-    {
-        ProximityCalculatorResponse FindNumberofMatches(string[] args);
-    }
-
+    /// <summary>
+    /// Service for proximity search
+    /// </summary>
     public class ProximitySearchService : IProximitySearchService
     {
         private readonly IArgumentParser _argumentParser;
@@ -30,12 +22,18 @@ namespace ProximitySearch
             _fileParser = fileParser;
             _proximitySearchCalculator = proximitySearchCalculator;
         }
+
+        /// <summary>
+        /// Finds number of matches in a response object
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns>ProximityCalculatorResponse with numberofmatches and errormessage if any</returns>
         public ProximityCalculatorResponse FindNumberofMatches(string[] args)
         {
-            var proximitySearchRequest = _argumentParser.ParseArguments(args);
             var response = new ProximityCalculatorResponse();
             try
             {
+                var proximitySearchRequest = _argumentParser.ParseArguments(args);
                 var numberofMatches = _proximitySearchCalculator.FindNumberofMatches(new ProximityCalculatorRequest
                 {
                     KeyWords = proximitySearchRequest.KeyWords,

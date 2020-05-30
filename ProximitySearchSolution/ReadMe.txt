@@ -1,21 +1,24 @@
 Assumptions:
 1.The search will ignore case
 2.The search will ignore extra spacing
+3.Filename must have an extension txt
+4.Filename must reside in the same folder as executable (I have it in bin\Debug folder)
+
 
 Explanation:
-Although the problem asks for 2 keyword search, the core service (ProximitySearchService) implemented is generic and can be used
+Although the problem asks for 2 keyword search, the core service (ProximitySearchService) implemented is generalized 
 for any number of keywords (though the argument parser class in the console only assumes 2 keywords). 
-I have unit tests for 3 keywords(ProximitySearchCalculatorTest and method If_Valid_Request_Returns_Correct_Response4)
+
 
 Language: C#
 Algorithm:
 1.Store all the words in the inputfile in a List<string> 
 2.Store Position of each keyword in a separate collection. Hence for K keywords there will be K collections.
-  For 2 keywords 2 collections
+  Hence 2 keywords 2 collections
   The collection should be sorted. In my case I used a stack.While creating stacks, the positions were
   already sorted since we looped though all the words in the file in increasing order
 3. Have a counter for numberofMatches = 0  
-4. Find the stack having the least position min by using stack.peek for each. Let smin be stack with least position
+4. Find the stack having the least position min by using stack.peek() for each. Let smin be stack with least position
 5. Find Count of the positions in each stack(excluding smin) which are less than or equal to (range - 1) and get their product.The product
    gives us the number of matches for each position in the min stack
    Increment counter by prod.

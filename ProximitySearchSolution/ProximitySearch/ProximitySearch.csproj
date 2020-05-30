@@ -42,9 +42,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentParser.cs" />
-    <Compile Include="FileHelper.cs" />
+    <Compile Include="IFileParser.cs" />
+    <Compile Include="IProximitySearchCalculator.cs" />
+    <Compile Include="IProximitySearchService.cs" />
+    <Compile Include="ProximityCalculatorResponse.cs" />
+    <Compile Include="ProximityCalculatorRequest.cs" />
+    <Compile Include="TextCleanUpHelper.cs" />
     <Compile Include="FileParser.cs" />
+    <Compile Include="IArgumentParser.cs" />
     <Compile Include="ProximitySearchCalculator.cs" />
+    <Compile Include="ProximitySearchRequest.cs" />
     <Compile Include="ProximitySearchService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

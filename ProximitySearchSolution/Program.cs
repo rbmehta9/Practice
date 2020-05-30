@@ -21,13 +21,7 @@ namespace ProximitySearchConsole
 
             var proximitySearchService = serviceProvider.GetService<IProximitySearchService>();
             var response = proximitySearchService.FindNumberofMatches(args);
-
-            if (response.NumberofMatches.HasValue)
-                Console.WriteLine($"Number of Matches {response.NumberofMatches}");
-            else
-                Console.WriteLine($"ProximitySearchService errored out with the message {response.ErrorMessage}");
-
-            
+            Console.WriteLine(response.DisplayMessage);
             
         }
     }

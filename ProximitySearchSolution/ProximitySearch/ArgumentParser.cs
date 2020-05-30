@@ -9,19 +9,6 @@ namespace ProximitySearch
     /// <summary>
     /// Parse arguments
     /// </summary>
-    public interface IArgumentParser
-    {
-        /// <summary>
-        /// Parse Arguments
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns>ProximitySearchRequest with keyword1, keyword2, range, filename</returns>
-        ProximitySearchRequest ParseArguments(string[] args);
-    }
-
-    /// <summary>
-    /// Parse arguments
-    /// </summary>
     public class ArgumentParser : IArgumentParser
     {
         private const int NUMBER_OF_ARGUMENTS = 4;
@@ -69,24 +56,4 @@ namespace ProximitySearch
 
     }
 
-    /// <summary>
-    /// Request object for performing proximity search
-    /// </summary>
-    public class ProximitySearchRequest
-    {
-        /// <summary>
-        /// FileName
-        /// </summary>
-        public string FileName { get; set; }
-
-        /// <summary>
-        /// Max range to check for keywords
-        /// </summary>
-        public int Range { get; set; }
-
-        /// <summary>
-        /// Keywords
-        /// </summary>
-        public List<string> KeyWords { get; set; }
-    }
 }

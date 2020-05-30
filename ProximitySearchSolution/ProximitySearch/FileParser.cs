@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace ProximitySearch
 {
-    public interface IFileParser
-    {
-        IEnumerable<string> GetAllWords(string fileName);
-    }
-
     public class FileParser : IFileParser
     {
+        /// <summary>
+        /// Parse file to get all words in an ienumerable
+        /// </summary>
         public IEnumerable<string> GetAllWords(string fileName)
         {
             var text = File.ReadAllLines(fileName).ToList();

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ProximitySearch
 {
+    /// <summary>
+    /// Helper class for text cleanup
+    /// </summary>
     public static class TextCleanUpHelper
     {
         public static IEnumerable<string> GetWords(this List<string> text)
