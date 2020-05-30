@@ -28,7 +28,7 @@ namespace ProximitySearch.UnitTests
         [TestMethod]
         public void When_InputArgument_Valid_Returns_ProximitySearchRequest()
         {
-            var args = new string[4] { "kw1", "kw2", "2", "abc.Txt" };
+            var args = new string[4] { "kw1", "kw2", "2", "abc" };
             var proximitySearchRequest = new ArgumentParser().ParseArguments(args);
             Assert.IsTrue(proximitySearchRequest.KeyWords.Contains(args[0]));
             Assert.IsTrue(proximitySearchRequest.KeyWords.Contains(args[1]));
