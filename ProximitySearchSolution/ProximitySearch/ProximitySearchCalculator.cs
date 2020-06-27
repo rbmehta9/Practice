@@ -24,6 +24,7 @@ namespace ProximitySearch
             if (request.KeyWords.GroupBy(k => k).Any(grp => grp.Count() > 1))
                 throw new ArgumentException("Keywords cannot be repeated");
 
+            //O(n) S(n)
             var keyWordStackPositions = GetKeyWordPositions(request.TextWords, request.KeyWords);
             if (keyWordStackPositions.Count() < request.KeyWords.Count())
                 return 0;
@@ -31,10 +32,14 @@ namespace ProximitySearch
             var numofMatches = 0;
             do
             {
+                //O(k) 
                 stackWithMinimumPosition = FindStackWithMinimumPosition(request.TextWords, keyWordStackPositions);
                 var prod = 1;
                 int minIndex = stackWithMinimumPosition.Peek();
+                //O(K)
                 var stacksNotHavingMinimumPosition = keyWordStackPositions.Where(k => k != stackWithMinimumPosition);
+
+                //O(r1*r2..rk)
                 foreach (var stack in stacksNotHavingMinimumPosition)
                     prod *= stack.Count(pos => pos <= minIndex + request.Range - 1);
 
@@ -42,7 +47,7 @@ namespace ProximitySearch
                 stackWithMinimumPosition.Pop();
 
             }
-            while (stackWithMinimumPosition.Any());
+            while (stackWithMinimumPosition.Any()); //O(n1) where n1 is the size of smallest stack
 
             return numofMatches;
 

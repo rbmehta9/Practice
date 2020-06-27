@@ -23,6 +23,63 @@ namespace Trees
             }
         }
 
+        /// <summary>
+        /// https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+        /// </summary>
+        /// <param name="root"></param>
+        public static void Flatten(Node root)
+        {
+            FlattenTree(root);
+        }
+
+        private static Node FlattenTree(Node node)
+        {
+
+            if (node == null) return null;
+            var left = FlattenTree(node.left);
+            var right = FlattenTree(node.right);
+            var t = node.right;
+            var isNodeLeft = node.left != null;
+            if (isNodeLeft)
+            {
+                node.right = node.left;
+                left.right = t;
+                node.left = null;
+            }
+
+            return GetRightMostNode(node)  ;
+
+            Node GetRightMostNode(Node startNode)
+            {
+                var currentNode = startNode;
+                while (currentNode.right != null)
+                    currentNode = currentNode.right;
+                return currentNode;
+            }
+        }
+
+        //private static Node FlattenTree(Node node)
+        //{
+        //    if (node == null)
+        //        return null;
+        //    else if (node.left == null && node.right == null)
+        //        return node;
+        //    else if (node.left == null)
+        //        return FlattenTree(node.right);
+        //    else
+        //    {
+        //        var lowerLeft = FlattenTree(node.left);
+        //        var t = node.right;
+        //        node.right = node.left;
+        //        if(lowerLeft != null)
+        //            lowerLeft.right = t;
+        //        node.left = null;
+        //        return FlattenTree(t);
+        //    }
+
+
+        //}
+
         static bool isUniValTree(Node node)
         {
             if (node == null)
@@ -1276,13 +1333,37 @@ namespace Trees
             //root = ConvertArrayToTree(list.ToArray());
             //var lcaNode = LowestCommonAncestor(root, root.right.left, root.right.right);
 
-            root = new Node(1);
-            root.left = new Node(2);
-            root.right = new Node(3);
-            root.right.left = new Node(4);
-            root.right.right = new Node(5);
-            var str = serialize(root);
-            var node = deserialize("[1,2]");
+            //root = new Node(1);
+            //root.left = new Node(2);
+            //root.right = new Node(3);
+            //root.right.left = new Node(4);
+            //root.right.right = new Node(5);
+            //var str = serialize(root);
+            //var node = deserialize("[1,2]");
+
+            //var root = new Node(1);
+            //root.left = new Node(2);
+            //root.left.left = new Node(3);
+
+            //root.left.left.left = new Node(4);
+            //root.left.left.left.left = new Node(5);
+            //root.left.left.left.left.left = new Node(6);
+            //root.left.right = new Node(4);
+
+            //root.left.left.left = new Node(5);
+
+            //root.right = new Node(5);
+            //root.right.right = new Node(6);
+
+            //root = new Node(1);
+            //root.right = new Node(2);
+            //root.right.left = new Node(3);
+
+            var root = new Node(4);
+            root.left = new Node(1);
+            root.left.right = new Node(2);
+            root.left.right.right = new Node(3);
+            Flatten(root);
             Console.ReadLine();
         }
     }
